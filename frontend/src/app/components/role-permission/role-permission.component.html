@@ -1,0 +1,55 @@
+<div class="space-y-6">
+  <div class="card-pro p-6">
+    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+      <i class="bi bi-shield-lock text-primary-600"></i>
+      {{ 'nav.permissions' | translate }}
+    </h2>
+    <p class="text-slate-500 text-sm mt-1">Manage access levels and capabilities for each system role.</p>
+  </div>
+
+  <div class="card-pro overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left">
+        <thead class="bg-slate-50 border-b border-slate-200">
+          <tr>
+            <th class="px-4 py-2.5 text-sm font-black text-slate-400 uppercase tracking-widest">Role</th>
+            <th class="px-4 py-2.5 text-sm font-black text-slate-400 uppercase tracking-widest">Feature</th>
+            <th class="px-4 py-2.5 text-center text-sm font-black text-slate-400 uppercase tracking-widest">View</th>
+            <th class="px-4 py-2.5 text-center text-sm font-black text-slate-400 uppercase tracking-widest">Create</th>
+            <th class="px-4 py-2.5 text-center text-sm font-black text-slate-400 uppercase tracking-widest">Update</th>
+            <th class="px-4 py-2.5 text-center text-sm font-black text-slate-400 uppercase tracking-widest">Delete</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          @for (policy of permissionService.policies(); track policy.role) {
+            @for (feature of features; track feature; let first = $first) {
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="px-4 py-1.5 whitespace-nowrap">
+                  @if (first) {
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-100 text-primary-700 border border-primary-200 uppercase">
+                      {{ policy.role }}
+                    </span>
+                  }
+                </td>
+                <td class="px-4 py-1.5 whitespace-nowrap">
+                  <span class="text-sm font-bold text-slate-700 capitalize">{{ feature }}</span>
+                </td>
+                @for (cap of capabilities; track cap) {
+                  <td class="px-4 py-1.5 text-center">
+                    <input 
+                      type="checkbox" 
+                      class="w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed" 
+                      [checked]="hasPermission(policy, feature, cap)"
+                      (change)="togglePermission(policy, feature, cap)"
+                      [disabled]="policy.role === 'ADMIN'"
+                    >
+                  </td>
+                }
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

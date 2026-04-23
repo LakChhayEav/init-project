@@ -1,0 +1,74 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+      <i class="bi bi-list-check text-primary-600"></i>
+      {{ 'nav.tasks' | translate }}
+    </h2>
+
+    @if (permissionService.canCreate('tasks')) {
+      <button class="btn-primary-gdt" (click)="isAddingTask.set(!isAddingTask())">
+        <i class="bi" [class.bi-plus-lg]="!isAddingTask()" [class.bi-dash-lg]="isAddingTask()"></i>
+        <span class="ml-2">{{ isAddingTask() ? 'common.cancel' : 'common.add' | translate }}</span>
+      </button>
+    }
+  </div>
+
+  @if (permissionService.canCreate('tasks') && isAddingTask()) {
+    <div class="card-pro p-6 bg-slate-50 border-primary-100 animate-in slide-in-from-top-4 duration-300">
+      <h5 class="text-sm font-bold text-slate-700 mb-4">{{ 'task.new' | translate }}</h5>
+      <form [formGroup]="taskForm" (ngSubmit)="addTask()" class="flex flex-col md:flex-row gap-4">
+        <div class="flex-1">
+          <input formControlName="title" [placeholder]="'task.title' | translate" class="input-pro">
+        </div>
+        <div class="flex-[2]">
+          <input formControlName="description" [placeholder]="'task.description' | translate" class="input-pro">
+        </div>
+        <button type="submit" class="btn-primary-gdt px-8">{{ 'common.add' | translate }}</button>
+      </form>
+    </div>
+  }
+
+  <div class="card-pro divide-y divide-slate-100">
+    @if (tasks().length === 0) {
+      <div class="text-center py-16 bg-slate-50/30">
+        <i class="bi bi-inbox text-5xl text-slate-200"></i>
+        <p class="text-slate-400 mt-4 font-medium">{{ 'common.no_tasks' | translate }}</p>
+      </div>
+    }
+
+    @for (task of tasks(); track task.id) {
+      <div class="px-4 py-2 flex items-center justify-between hover:bg-slate-50 transition-colors group task-item">
+        <div class="flex items-center gap-4">
+          <input
+            type="checkbox"
+            class="w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 transition-all cursor-pointer"
+            [checked]="task.completed"
+            [disabled]="!permissionService.canUpdate('tasks')"
+            (change)="toggleTask(task, $event)"
+          >
+
+          <div class="space-y-0.5">
+            <h6 class="text-sm font-bold transition-all"
+                [class]="task.completed ? 'text-slate-400 line-through text-decoration-line-through' : 'text-slate-800'">
+              {{ task.title }}
+            </h6>
+            <p class="text-xs text-slate-500 font-medium">{{ task.description }}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <span class="px-2.5 py-1 rounded-full text-xs font-black uppercase tracking-wider border"
+            [class]="task.completed ? 'bg-green-50 text-green-700 border-green-100' : 'bg-primary-50 text-primary-700 border-primary-100'">
+            {{ (task.completed ? 'common.completed' : 'common.pending') | translate }}
+          </span>
+
+          @if (permissionService.canDelete('tasks')) {
+            <button (click)="deleteTask(task.id!)" class="p-1.5 text-slate-300 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100">
+              <i class="bi bi-trash3 text-base"></i>
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

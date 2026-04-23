@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.taskapp.mapper.TaskMapper">
+
+    <select id="findAll" resultType="com.example.taskapp.model.Task">
+        SELECT * FROM tasks
+    </select>
+
+    <select id="findById" resultType="com.example.taskapp.model.Task">
+        SELECT * FROM tasks WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tasks (title, description, completed, created_at, updated_at)
+        VALUES (#{title}, #{description}, #{completed}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <update id="update">
+        UPDATE tasks
+        SET title = #{title}, description = #{description}, completed = #{completed}, updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM tasks WHERE id = #{id}
+    </delete>
+
+</mapper>

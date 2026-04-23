@@ -1,0 +1,6 @@
+.task-item:hover {
+  background-color: #f8fafc;
+}
+.text-decoration-line-through {
+  text-decoration: line-through !important;
+}

@@ -1,0 +1,13 @@
+com\example\taskapp\controller\UserController.class
+com\example\taskapp\controller\TaskController.class
+com\example\taskapp\service\TaskService.class
+com\example\taskapp\service\UserService.class
+com\example\taskapp\mapper\PermissionMapper.class
+com\example\taskapp\mapper\RoleMapper.class
+com\example\taskapp\model\Role.class
+com\example\taskapp\TaskApplication.class
+com\example\taskapp\model\Permission.class
+com\example\taskapp\mapper\TaskMapper.class
+com\example\taskapp\mapper\UserMapper.class
+com\example\taskapp\model\Task.class
+com\example\taskapp\model\User.class

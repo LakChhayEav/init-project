@@ -1,0 +1,23 @@
+.popup-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(16, 29, 48, 0.52);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.popup-card {
+  width: min(100%, 520px);
+  border-radius: 14px;
+  border: 1px solid #d7e3f3;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+  padding: 1rem 1rem 1.15rem;
+}
+
+.btn-group .btn {
+  min-width: 36px;
+}
