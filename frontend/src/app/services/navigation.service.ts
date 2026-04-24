@@ -23,6 +23,7 @@ export class NavigationService {
 
   readonly tabs = signal<AppTab[]>([]);
   readonly activeTabId = signal<string | null>(null);
+  readonly isSidebarOpen = signal(true);
 
   readonly activeTab = computed(
     () => this.tabs().find((tab) => tab.id === this.activeTabId()) ?? null,
@@ -101,6 +102,10 @@ export class NavigationService {
   clearTabs(): void {
     this.tabs.set([]);
     this.activeTabId.set(null);
+  }
+
+  toggleSidebar(): void {
+    this.isSidebarOpen.update(v => !v);
   }
 
   private getFirstAccessibleTab(): MenuTabType | null {

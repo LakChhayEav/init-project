@@ -82,9 +82,9 @@ export class RolePermissionComponent {
     if (this.modifiedRoleIds.size === 0) return;
 
     this.confirmService.open({
-      title: 'Save Permissions',
-      message: 'Are you sure you want to save all permission changes?',
-      confirmText: 'Save',
+      title: 'confirm.permission.save.title',
+      message: 'confirm.permission.save.message',
+      confirmText: 'common.save',
       onConfirm: () => {
         const requests = Array.from(this.modifiedRoleIds).map(roleId => {
           const role = this.roles().find(r => r.id === roleId);
@@ -139,9 +139,9 @@ export class RolePermissionComponent {
 
     if (this.isEditMode()) {
       this.confirmService.open({
-        title: 'Update Role',
-        message: 'Are you sure you want to save these changes to the role?',
-        confirmText: 'Save',
+        title: 'confirm.role.update.title',
+        message: 'confirm.role.update.message',
+        confirmText: 'common.save',
         onConfirm: executeRequest
       });
     } else {
@@ -151,9 +151,9 @@ export class RolePermissionComponent {
 
   deleteRole(id: number): void {
     this.confirmService.open({
-      title: 'Delete Role',
-      message: 'Are you sure you want to delete this role? All associated permissions will be removed.',
-      confirmText: 'Delete',
+      title: 'confirm.role.delete.title',
+      message: 'confirm.role.delete.message',
+      confirmText: 'common.delete',
       onConfirm: () => {
         this.roleService.deleteRole(id).subscribe(() => this.loadData());
       }

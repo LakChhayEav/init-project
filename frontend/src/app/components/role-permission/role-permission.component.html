@@ -1,20 +1,22 @@
 <div class="space-y-6">
-  <div class="card-pro p-6">
-    <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
-      <i class="bi bi-shield-lock text-primary-600"></i>
-      {{ 'nav.permissions' | translate }}
-    </h2>
-    <p class="text-slate-500 text-sm mt-1">
-      Manage access levels and capabilities for each system role.
-    </p>
+  <div class="card-pro p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+        <i class="bi bi-shield-lock text-primary-600"></i>
+        {{ 'nav.permissions' | translate }}
+      </h2>
+      <p class="text-slate-500 text-sm mt-1">
+        {{ 'role.subtitle' | translate }}
+      </p>
+    </div>
     
-    <div class="mt-4 flex gap-2">
+    <div class="flex gap-2">
       <button class="btn-primary md:w-auto group" (click)="openCreatePopup()">
-        <i class="bi bi-plus-lg mr-2 group-hover:scale-110 transition-transform"></i> Add Role
+        <i class="bi bi-plus-lg mr-2 group-hover:scale-110 transition-transform"></i> {{ 'role.add' | translate }}
       </button>
       @if (hasUnsavedChanges()) {
         <button class="btn-primary bg-green-600 hover:bg-green-700 ring-green-500 border-green-600 animate-in fade-in zoom-in duration-300 md:w-auto" (click)="savePermissions()">
-          <i class="bi bi-check2-all mr-2"></i> Save Permissions
+          <i class="bi bi-check2-all mr-2"></i> {{ 'role.save_permissions' | translate }}
         </button>
       }
     </div>
@@ -26,30 +28,30 @@
         <thead class="bg-slate-50 border-b border-slate-200">
           <tr>
             <th class="px-4 py-2.5 text-sm font-black text-slate-400 uppercase tracking-widest">
-              Role
+              {{ 'common.role' | translate }}
             </th>
             <th class="px-4 py-2.5 text-sm font-black text-slate-400 uppercase tracking-widest">
-              Feature
+              {{ 'role.feature' | translate }}
             </th>
             <th
               class="px-4 py-2.5 text-center text-sm font-black text-slate-400 uppercase tracking-widest"
             >
-              View
+              {{ 'role.view' | translate }}
             </th>
             <th
               class="px-4 py-2.5 text-center text-sm font-black text-slate-400 uppercase tracking-widest"
             >
-              Create
+              {{ 'role.create' | translate }}
             </th>
             <th
               class="px-4 py-2.5 text-center text-sm font-black text-slate-400 uppercase tracking-widest"
             >
-              Update
+              {{ 'role.update' | translate }}
             </th>
             <th
               class="px-4 py-2.5 text-center text-sm font-black text-slate-400 uppercase tracking-widest"
             >
-              Delete
+              {{ 'role.delete' | translate }}
             </th>
           </tr>
         </thead>
@@ -104,18 +106,18 @@
       <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
         <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
           <i class="bi" [class.bi-shield-plus]="!isEditMode()" [class.bi-pencil-square]="isEditMode()"></i>
-          {{ isEditMode() ? 'Edit Role' : 'Add Role' }}
+          {{ (isEditMode() ? 'role.edit' : 'role.add') | translate }}
         </h3>
         <button type="button" class="text-slate-400 hover:text-slate-600" (click)="closePopup()">
-          <i class="bi bi-xl text-2xl"></i>
+          <i class="bi bi-x text-2xl"></i>
         </button>
       </div>
 
       <div class="p-6">
         <form [formGroup]="roleForm" (ngSubmit)="submitRoleForm()" class="space-y-4">
           <div class="space-y-1">
-            <label class="label-pro">Role Name</label>
-            <input formControlName="name" class="input-pro uppercase" placeholder="e.g. MANAGER" />
+            <label class="label-pro">{{ 'role.name' | translate }}</label>
+            <input formControlName="name" class="input-pro uppercase" [placeholder]="'role.name_placeholder' | translate" />
           </div>
 
           <div class="pt-6 flex gap-3">

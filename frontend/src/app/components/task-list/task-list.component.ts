@@ -57,9 +57,9 @@ export class TaskListComponent {
     const checked = target.checked;
 
     this.confirmService.open({
-      title: 'Update Task',
-      message: 'Are you sure you want to update this task\'s status?',
-      confirmText: 'Update',
+      title: 'confirm.task.update.title',
+      message: 'confirm.task.update.message',
+      confirmText: 'role.update',
       onConfirm: () => {
         this.taskService
           .updateTask(task.id!, { ...task, completed: checked })
@@ -75,9 +75,9 @@ export class TaskListComponent {
     if (!this.permissionService.canDelete('tasks')) return;
 
     this.confirmService.open({
-      title: 'Delete Task',
-      message: 'Are you sure you want to delete this task? This action cannot be undone.',
-      confirmText: 'Delete',
+      title: 'confirm.task.delete.title',
+      message: 'confirm.task.delete.message',
+      confirmText: 'common.delete',
       onConfirm: () => {
         this.taskService.deleteTask(id).subscribe(() => this.loadTasks());
       }

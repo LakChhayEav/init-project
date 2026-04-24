@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { LanguageService, Language } from '../../../services/language.service';
+import { NavigationService } from '../../../services/navigation.service';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +14,7 @@ import { LanguageService, Language } from '../../../services/language.service';
 export class HeaderComponent {
   readonly authService = inject(AuthService);
   readonly langService = inject(LanguageService);
+  readonly navService = inject(NavigationService);
 
   changeLang(lang: Language): void {
     this.langService.setLanguage(lang);

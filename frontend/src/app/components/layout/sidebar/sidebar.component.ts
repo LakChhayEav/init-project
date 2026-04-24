@@ -22,7 +22,12 @@ export class SidebarComponent {
   readonly isSecurityMenuOpen = signal(false);
 
   toggleSecurityMenu(): void {
-    this.isSecurityMenuOpen.update((v) => !v);
+    if (!this.navService.isSidebarOpen()) {
+      this.navService.toggleSidebar();
+      this.isSecurityMenuOpen.set(true);
+    } else {
+      this.isSecurityMenuOpen.update((v) => !v);
+    }
   }
 
   logout(): void {

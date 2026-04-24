@@ -1,15 +1,16 @@
 @if (authService.isLoggedIn()) {
-<div class="flex min-h-screen bg-slate-50">
+<div class="flex h-screen w-full bg-slate-50">
   <!-- Sidebar -->
   <app-sidebar />
 
   <!-- Main Content Area -->
-  <div class="flex-1 flex flex-col ml-64">
+  <div class="flex-1 flex flex-col transition-all duration-300 ease-in-out" [class.ml-72]="navService.isSidebarOpen()"
+    [class.ml-20]="!navService.isSidebarOpen()">
     <!-- Header -->
     <app-header />
 
     <!-- Main View Content -->
-    <main class="flex-1 p-4 bg-slate-50">
+    <main class="flex-1 flex flex-col p-4 bg-slate-50 overflow-y-auto h-full">
       <!-- Reactive Tab Header -->
       @if (navService.tabs().length > 0) {
       <div class="flex items-center gap-0.5 scrollbar-hide border-b border-slate-200 mb-0.5 px-2">
@@ -31,7 +32,7 @@
       }
 
       <!-- Tab Content Area -->
-      <div class="bg-white rounded-xl border border-slate-200 shadow-xl shadow-slate-200/40 min-h-[calc(100vh-10rem)]">
+      <div class="flex-1 bg-white rounded-xl border border-slate-200 shadow-xl shadow-slate-200/40">
         @for (tab of navService.tabs(); track tab.id) {
         <div [class.hidden]="tab.id !== navService.activeTabId()" class="p-6">
           @switch (tab.type) {
@@ -56,7 +57,7 @@
     <!-- Footer -->
     <app-footer />
   </div>
-  
+
   <app-confirm-dialog />
 </div>
 } @else {

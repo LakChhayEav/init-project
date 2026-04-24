@@ -209,9 +209,9 @@ export class UserListComponent {
 
     if (editing) {
       this.confirmService.open({
-        title: 'Update User',
-        message: 'Are you sure you want to save these changes?',
-        confirmText: 'Save',
+        title: 'confirm.user.update.title',
+        message: 'confirm.user.update.message',
+        confirmText: 'common.save',
         onConfirm: executeRequest
       });
     } else {
@@ -223,9 +223,9 @@ export class UserListComponent {
     if (!this.permissionService.canUpdate('users')) return;
 
     this.confirmService.open({
-      title: 'Update User Status',
-      message: 'Are you sure you want to update this user\'s status?',
-      confirmText: 'Update',
+      title: 'confirm.user.status.title',
+      message: 'confirm.user.status.message',
+      confirmText: 'role.update',
       onConfirm: () => {
         this.userService.updateUser(user.id!, user).subscribe({
           error: () => {
@@ -243,9 +243,9 @@ export class UserListComponent {
     if (!this.permissionService.canDelete('users')) return;
 
     this.confirmService.open({
-      title: 'Delete User',
-      message: 'Are you sure you want to delete this user? This action cannot be undone.',
-      confirmText: 'Delete',
+      title: 'confirm.user.delete.title',
+      message: 'confirm.user.delete.message',
+      confirmText: 'common.delete',
       onConfirm: () => {
         this.userService.deleteUser(id).subscribe(() => this.loadUsers());
       }
