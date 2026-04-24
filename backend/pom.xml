@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.4.3</version>
+		<version>4.0.5</version>
 		<relativePath/>
 	</parent>
 	<groupId>com.example</groupId>
@@ -24,7 +24,7 @@
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>3.0.4</version>
+			<version>4.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -34,7 +34,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-			<version>2.8.5</version>
+			<version>3.0.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -43,18 +43,18 @@
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
-			<version>0.12.6</version>
+			<version>0.13.0</version>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
-			<version>0.12.6</version>
+			<version>0.13.0</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
-			<version>0.12.6</version>
+			<version>0.13.0</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
