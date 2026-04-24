@@ -11,7 +11,7 @@ import { TranslatePipe } from '../../translate.pipe';
   imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   private readonly authService = inject(AuthService);
@@ -22,7 +22,7 @@ export class LoginComponent {
 
   readonly loginForm = this.fb.nonNullable.group({
     username: ['', Validators.required],
-    password: ['', Validators.required]
+    password: ['', Validators.required],
   });
 
   login(): void {
@@ -30,7 +30,7 @@ export class LoginComponent {
 
     this.authService.login({ username, password }).subscribe({
       next: () => this.router.navigate(['/main']),
-      error: () => this.error.set('Invalid username or password')
+      error: () => this.error.set('Invalid username or password'),
     });
   }
 }

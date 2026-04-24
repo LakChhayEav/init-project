@@ -15,23 +15,25 @@ import { MainPageComponent } from './components/main-page/main-page.component';
 import { TaskListComponent } from './components/task-list/task-list.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { RolePermissionComponent } from './components/role-permission/role-permission.component';
+import { ConfirmDialogComponent } from './components/shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet, 
+    RouterOutlet,
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
-    MainPageComponent, 
-    TaskListComponent, 
-    UserListComponent, 
-    RolePermissionComponent
+    MainPageComponent,
+    TaskListComponent,
+    UserListComponent,
+    RolePermissionComponent,
+    ConfirmDialogComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   readonly authService = inject(AuthService);
@@ -51,16 +53,19 @@ export class AppComponent {
 
       if (loggedIn && currentTabs.length === 0) {
         const order = ['main', 'tasks', 'users', 'permissions'] as any[];
-        const first = order.find(t => this.permissionService.canView(t));
+        const first = order.find((t) => this.permissionService.canView(t));
         if (first) this.navService.openMenuTab(first);
         return;
       }
 
       // Remove tabs the user can no longer view
-      const filtered = currentTabs.filter(tab => this.permissionService.canView(tab.type));
+      const filtered = currentTabs.filter((tab) => this.permissionService.canView(tab.type));
       if (filtered.length !== currentTabs.length) {
         this.navService.tabs.set(filtered);
-        if (this.navService.activeTabId() && !filtered.some(t => t.id === this.navService.activeTabId())) {
+        if (
+          this.navService.activeTabId() &&
+          !filtered.some((t) => t.id === this.navService.activeTabId())
+        ) {
           this.navService.activeTabId.set(filtered[0]?.id ?? null);
         }
       }

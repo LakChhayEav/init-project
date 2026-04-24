@@ -10,10 +10,10 @@
     </div>
 
     @if (permissionService.canCreate('users')) {
-    <button class="btn-primary-gdt group" type="button" (click)="openCreatePopup()">
-      <i class="bi bi-person-plus text-lg mr-2 group-hover:scale-110 transition-transform"></i>
-      {{ 'user.add' | translate }}
-    </button>
+      <button class="btn-primary group md:w-auto" type="button" (click)="openCreatePopup()">
+        <i class="bi bi-person-plus text-lg mr-2 group-hover:scale-110 transition-transform"></i>
+        {{ 'user.add' | translate }}
+      </button>
     }
   </div>
 
@@ -24,8 +24,13 @@
         <label for="filterSearch" class="label-pro">{{ 'common.search' | translate }}</label>
         <div class="relative">
           <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input id="filterSearch" formControlName="search" class="input-pro pl-10"
-            [placeholder]="'common.search' | translate" (keyup.enter)="search()">
+          <input
+            id="filterSearch"
+            formControlName="search"
+            class="input-pro pl-10"
+            [placeholder]="'common.search' | translate"
+            (keyup.enter)="search()"
+          />
         </div>
       </div>
 
@@ -43,13 +48,13 @@
         <select id="filterRole" formControlName="role" class="input-pro" (change)="search()">
           <option value="all">{{ 'common.role' | translate }} (All)</option>
           @for (role of roleOptions(); track role) {
-          <option [value]="role">{{ role }}</option>
+            <option [value]="role">{{ role }}</option>
           }
         </select>
       </div>
 
       <div class="flex items-end">
-        <button type="button" class="btn-primary-gdt w-full" (click)="search()">
+        <button type="button" class="btn-primary w-full md:w-auto" (click)="search()">
           <i class="bi bi-search mr-2"></i> {{ 'common.search' | translate }}
         </button>
       </div>
@@ -57,213 +62,200 @@
   </div>
 
   <!-- Table -->
-  <div class="card-pro">
-    <div class="overflow-x-auto">
-      <table class="w-full text-left">
-        <thead class="bg-slate-50 border-b border-slate-200">
-          <tr>
-            <th class="px-4 py-2.5 text-sm font-bold text-slate-500 uppercase tracking-wider">{{ 'user.username' | translate }}</th>
-            <th class="px-4 py-2.5 text-sm font-bold text-slate-500 uppercase tracking-wider">{{ 'common.status' | translate }}</th>
-            <th class="px-4 py-2.5 text-sm font-bold text-slate-500 uppercase tracking-wider">{{ 'user.roles' | translate }}</th>
-            <th class="px-4 py-2.5 text-sm font-bold text-slate-500 uppercase tracking-wider text-right">{{ 'common.actions' | translate }}</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-200">
-          @if (totalElements() === 0) {
-          <tr>
-            <td colspan="4" class="px-6 py-12 text-center text-slate-500 italic">
-              <i class="bi bi-inbox text-4xl block mb-2 opacity-20"></i>
-              No users matched your filters.
-            </td>
-          </tr>
-          }
-
-          @for (user of paginatedUsers(); track user.id) {
-          <tr class="hover:bg-slate-50/80 transition-colors group">
-            <td class="px-4 py-1.5 whitespace-nowrap">
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-bold text-xs border border-primary-200">
-                  {{ (user.username || '?').charAt(0).toUpperCase() }}
-                </div>
-                <div>
-                  <div class="text-sm font-bold text-slate-900">{{ user.username }}</div>
-                  <div class="text-xs text-slate-500">{{ user.email }}</div>
-                </div>
-              </div>
-            </td>
-
-            <td class="px-4 py-1.5 whitespace-nowrap">
-              <div class="flex items-center gap-2">
-                <button
-                  class="relative inline-flex h-4 w-8 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-primary-600 focus:ring-offset-1"
-                  [class]="user.enabled ? 'bg-green-500' : 'bg-slate-200'"
-                  [disabled]="!permissionService.canUpdate('users')"
-                  (click)="user.enabled = !user.enabled; toggleUser(user)">
-                  <span
-                    class="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-                    [class.translate-x-4]="user.enabled" [class.translate-x-0]="!user.enabled"></span>
-                </button>
-                <span class="text-xs font-semibold" [class]="user.enabled ? 'text-green-600' : 'text-slate-400'">
-                  {{ user.enabled ? ('user.active' | translate) : ('user.inactive' | translate) }}
-                </span>
-              </div>
-            </td>
-
-            <td class="px-4 py-1.5">
-              <div class="flex flex-wrap gap-1">
-                @for (role of user.roles; track role.name) {
-                <span
-                  class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-primary-50 text-primary-700 border border-primary-100 uppercase">
-                  {{ role.name }}
-                </span>
-                } @empty {
-                <span class="text-[10px] text-slate-400 italic">No roles</span>
-                }
-              </div>
-            </td>
-
-            <td class="px-4 py-1.5 whitespace-nowrap text-right text-sm font-medium">
-              <div class="flex justify-end gap-1">
-                @if (permissionService.canUpdate('users')) {
-                <button type="button"
-                  class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-md transition-all"
-                  title="Edit user" (click)="openEditPopup(user)">
-                  <i class="bi bi-pencil-square"></i>
-                </button>
-                }
-                @if (permissionService.canDelete('users')) {
-                <button type="button"
-                  class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-all"
-                  title="Delete user" (click)="deleteUser(user.id!)">
-                  <i class="bi bi-trash3"></i>
-                </button>
-                }
-              </div>
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Pagination -->
-    <div
-      class="px-4 py-2 bg-slate-50 border-t border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div class="flex items-center gap-4">
-        <span class="text-sm font-medium text-slate-500">
-          {{ 'common.showing' | translate }} <span class="text-slate-900 font-bold">{{ paginatedUsers().length }}</span>
-          {{ 'common.of' | translate }} <span class="text-slate-900 font-bold">{{ totalElements() }}</span> {{
-          'common.users' | translate }}
-        </span>
-
+  <app-table
+    [data]="users()"
+    [columns]="columns"
+    [totalElements]="totalElements()"
+    [currentPage]="currentPage()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="pageSizeOptions"
+    (pageChange)="goToPage($event)"
+    (pageSizeChange)="onPageSizeChange($event)"
+  >
+    <ng-template #cellTemplate let-value let-row="row" let-col="column">
+      @if (col.key === 'username') {
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-bold text-xs border border-primary-200"
+          >
+            {{ (row.username || '?').charAt(0).toUpperCase() }}
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-900">{{ row.username }}</div>
+            <div class="text-xs text-slate-500">{{ row.email }}</div>
+          </div>
+        </div>
+      } @else if (col.key === 'enabled') {
         <div class="flex items-center gap-2">
-          <label for="pageSizeSelect" class="text-sm font-medium text-slate-500">{{ 'common.rows_per_page' | translate
-            }}</label>
-          <select id="pageSizeSelect"
-            class="bg-white border border-slate-300 rounded px-1.5 py-0.5 text-sm focus:ring-1 focus:ring-primary-500 focus:outline-none"
-            [value]="pageSize()" (change)="onPageSizeChange(+$any($event.target).value)">
-            @for (option of pageSizeOptions; track option) {
-            <option [value]="option">{{ option }}</option>
-            }
-          </select>
+          <button
+            class="relative inline-flex h-4 w-8 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-primary-600 focus:ring-offset-1"
+            [class]="row.enabled ? 'bg-green-500' : 'bg-slate-200'"
+            [disabled]="!permissionService.canUpdate('users')"
+            (click)="row.enabled = !row.enabled; toggleUser(row)"
+          >
+            <span
+              class="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+              [class.translate-x-4]="row.enabled"
+              [class.translate-x-0]="!row.enabled"
+            ></span>
+          </button>
+          <span
+            class="text-xs font-semibold"
+            [class]="row.enabled ? 'text-green-600' : 'text-slate-400'"
+          >
+            {{ row.enabled ? ('user.active' | translate) : ('user.inactive' | translate) }}
+          </span>
         </div>
-      </div>
-
-      <div class="flex items-center gap-1">
-        <button type="button"
-          class="p-1.5 rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-xs"
-          [disabled]="currentPage() === 0" (click)="goToPage(currentPage())">
-          <i class="bi bi-chevron-left"></i>
-        </button>
-
-        <div class="flex items-center gap-1 mx-2">
-          @for (page of pageNumbers(); track page) {
-          <button type="button"
-            class="w-7 h-7 flex items-center justify-center rounded-md text-sm font-bold transition-all"
-            [class]="page === currentPage() + 1 ? 'bg-primary-600 text-white shadow-md shadow-primary-200' : 'bg-white border border-slate-200 text-slate-600 hover:border-primary-300'"
-            (click)="goToPage(page)">{{ page }}</button>
+      } @else if (col.key === 'roles') {
+        <div class="flex flex-wrap gap-1">
+          @for (role of row.roles; track role.name) {
+            <span
+              class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-primary-50 text-primary-700 border border-primary-100 uppercase"
+            >
+              {{ role.name }}
+            </span>
+          } @empty {
+            <span class="text-[10px] text-slate-400 italic">No roles</span>
           }
         </div>
-
-        <button type="button"
-          class="p-1.5 rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-xs"
-          [disabled]="currentPage() === totalPages() - 1" (click)="goToPage(currentPage() + 2)">
-          <i class="bi bi-chevron-right"></i>
-        </button>
-      </div>
-    </div>
-  </div>
+      } @else if (col.key === 'actions') {
+        <div class="flex justify-end gap-1">
+          @if (permissionService.canUpdate('users')) {
+            <button
+              type="button"
+              class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-md transition-all"
+              title="Edit user"
+              (click)="openEditPopup(row)"
+            >
+              <i class="bi bi-pencil-square"></i>
+            </button>
+          }
+          @if (permissionService.canDelete('users')) {
+            <button
+              type="button"
+              class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-all"
+              title="Delete user"
+              (click)="deleteUser(row.id!)"
+            >
+              <i class="bi bi-trash3"></i>
+            </button>
+          }
+        </div>
+      } @else {
+        <span class="text-sm text-slate-600">{{ value }}</span>
+      }
+    </ng-template>
+  </app-table>
 </div>
 
 <!-- Modal Backdrop -->
 @if (isPopupOpen()) {
-<div
-  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200">
-    <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-      <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-        <i class="bi" [class.bi-person-plus]="!isEditMode()" [class.bi-pencil-square]="isEditMode()"></i>
-        {{ (isEditMode() ? 'user.edit' : 'user.add') | translate }}
-      </h3>
-      <button type="button" class="text-slate-400 hover:text-slate-600" (click)="closePopup()">
-        <i class="bi bi-xl text-2xl"></i>
-      </button>
-    </div>
-
-    <div class="p-6">
-      @if (actionMessage()) {
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200"
+  >
+    <div
+      class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200"
+    >
       <div
-        class="mb-6 p-4 rounded-xl border text-sm flex items-center gap-3 animate-in slide-in-from-top-2 duration-300"
-        [class]="actionError() ? 'bg-red-50 border-red-100 text-red-700' : 'bg-green-50 border-green-100 text-green-700'">
-        <i class="bi" [class]="actionError() ? 'bi-exclamation-circle-fill' : 'bi-check-circle-fill'"></i>
-        {{ actionMessage() }}
+        class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between"
+      >
+        <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+          <i
+            class="bi"
+            [class.bi-person-plus]="!isEditMode()"
+            [class.bi-pencil-square]="isEditMode()"
+          ></i>
+          {{ (isEditMode() ? 'user.edit' : 'user.add') | translate }}
+        </h3>
+        <button type="button" class="text-slate-400 hover:text-slate-600" (click)="closePopup()">
+          <i class="bi bi-xl text-2xl"></i>
+        </button>
       </div>
-      }
 
-      <form [formGroup]="userForm" (ngSubmit)="submitUserForm()" class="space-y-4">
-        <div class="grid grid-cols-2 gap-4">
+      <div class="p-6">
+        @if (actionMessage()) {
+          <div
+            class="mb-6 p-4 rounded-xl border text-sm flex items-center gap-3 animate-in slide-in-from-top-2 duration-300"
+            [class]="
+              actionError()
+                ? 'bg-red-50 border-red-100 text-red-700'
+                : 'bg-green-50 border-green-100 text-green-700'
+            "
+          >
+            <i
+              class="bi"
+              [class]="actionError() ? 'bi-exclamation-circle-fill' : 'bi-check-circle-fill'"
+            ></i>
+            {{ actionMessage() }}
+          </div>
+        }
+
+        <form [formGroup]="userForm" (ngSubmit)="submitUserForm()" class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="label-pro">{{ 'user.username' | translate }}</label>
+              <input
+                formControlName="username"
+                class="input-pro"
+                [placeholder]="'user.username' | translate"
+              />
+            </div>
+            <div class="space-y-1">
+              <label class="label-pro">{{ 'user.email' | translate }}</label>
+              <input
+                formControlName="email"
+                type="email"
+                class="input-pro"
+                placeholder="name@example.com"
+              />
+            </div>
+          </div>
+
           <div class="space-y-1">
-            <label class="label-pro">{{ 'user.username' | translate }}</label>
-            <input formControlName="username" class="input-pro" [placeholder]="'user.username' | translate">
+            <label class="label-pro">{{ 'user.password' | translate }}</label>
+            <input
+              formControlName="password"
+              type="password"
+              class="input-pro"
+              [placeholder]="isEditMode() ? 'Leave blank to keep current' : 'Choose a password'"
+            />
           </div>
-          <div class="space-y-1">
-            <label class="label-pro">{{ 'user.email' | translate }}</label>
-            <input formControlName="email" type="email" class="input-pro" placeholder="name@example.com">
-          </div>
-        </div>
 
-        <div class="space-y-1">
-          <label class="label-pro">{{ 'user.password' | translate }}</label>
-          <input formControlName="password" type="password" class="input-pro"
-            [placeholder]="isEditMode() ? 'Leave blank to keep current' : 'Choose a password'">
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div class="space-y-1">
-            <label class="label-pro">{{ 'common.role' | translate }}</label>
-            <select formControlName="role" class="input-pro">
-              <option value="ADMIN">ADMIN</option>
-              <option value="MANAGER">MANAGER</option>
-              <option value="USER">USER</option>
-            </select>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="label-pro">{{ 'user.roles' | translate }}</label>
+              <select formControlName="roles" multiple class="input-pro h-24">
+                <option value="ADMIN">ADMIN</option>
+                <option value="MANAGER">MANAGER</option>
+                <option value="USER">USER</option>
+              </select>
+              <p class="text-xs text-slate-500 mt-1">Hold Ctrl (or Cmd) to select multiple.</p>
+            </div>
+            <div class="flex items-center pt-7 px-2">
+              <label class="flex items-center gap-2 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  formControlName="enabled"
+                  class="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300"
+                />
+                <span
+                  class="text-sm font-semibold text-slate-700 group-hover:text-primary-600 transition-colors"
+                  >{{ 'user.enabled' | translate }}</span
+                >
+              </label>
+            </div>
           </div>
-          <div class="flex items-center pt-7 px-2">
-            <label class="flex items-center gap-2 cursor-pointer group">
-              <input type="checkbox" formControlName="enabled"
-                class="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300">
-              <span class="text-sm font-semibold text-slate-700 group-hover:text-primary-600 transition-colors">{{
-                'user.enabled' | translate }}</span>
-            </label>
-          </div>
-        </div>
 
-        <div class="pt-6 flex gap-3">
-          <button type="button" class="btn-secondary-gdt flex-1" (click)="closePopup()">{{ 'common.cancel' | translate
-            }}</button>
-          <button type="submit" class="btn-primary-gdt flex-1">{{ 'common.save' | translate }}</button>
-        </div>
-      </form>
+          <div class="pt-6 flex gap-3">
+            <button type="button" class="btn-secondary flex-1" (click)="closePopup()">
+              {{ 'common.cancel' | translate }}
+            </button>
+            <button type="submit" class="btn-primary flex-1">
+              {{ 'common.save' | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-</div>
 }

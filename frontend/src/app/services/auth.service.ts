@@ -22,7 +22,7 @@ interface RegisterRequest {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
@@ -33,7 +33,7 @@ export class AuthService {
   readonly token = signal<string | null>(null);
   readonly usernameSignal = signal<string | null>(null);
   readonly rolesSignal = signal<string[]>([]);
-  
+
   readonly isLoggedIn = computed(() => !!this.token());
 
   constructor() {
@@ -41,7 +41,7 @@ export class AuthService {
       // Sync with session storage on init
       this.token.set(sessionStorage.getItem('token'));
       this.usernameSignal.set(sessionStorage.getItem('username'));
-      
+
       const rolesRaw = sessionStorage.getItem('roles');
       if (rolesRaw) {
         try {
@@ -60,10 +60,10 @@ export class AuthService {
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
-      tap(response => {
+      tap((response) => {
         if (response.token) {
           const roles = response.roles?.length ? response.roles : ['USER'];
-          
+
           if (this.isBrowser) {
             sessionStorage.setItem('token', response.token);
             sessionStorage.setItem('username', response.username);
@@ -74,7 +74,7 @@ export class AuthService {
           this.usernameSignal.set(response.username);
           this.rolesSignal.set(roles);
         }
-      })
+      }),
     );
   }
 
@@ -88,7 +88,7 @@ export class AuthService {
       sessionStorage.removeItem('username');
       sessionStorage.removeItem('roles');
     }
-    
+
     this.token.set(null);
     this.usernameSignal.set(null);
     this.rolesSignal.set([]);
@@ -106,4 +106,3 @@ export class AuthService {
     return this.rolesSignal();
   }
 }
-

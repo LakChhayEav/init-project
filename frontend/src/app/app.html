@@ -15,10 +15,11 @@
       <div class="flex items-center gap-0.5 scrollbar-hide border-b border-slate-200 mb-0.5 px-2">
         @for (tab of navService.tabs(); track tab.id) {
         <button type="button"
-          class="flex items-center gap-2 px-3 py-1 transition-all whitespace-nowrap relative group border-t-2"
-          [class]="tab.id === navService.activeTabId() 
-            ? 'bg-white border-t-primary-600 border-x border-slate-200 -mb-[1px] rounded-t-xl text-primary-700 shadow-sm z-10' 
-            : 'bg-transparent border-t-transparent border-x border-x-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100/50 rounded-t-lg'" (click)="navService.activateTab(tab.id)">
+          class="flex items-center gap-2 px-3 py-1 transition-all whitespace-nowrap relative group border-t-2" [class]="
+                  tab.id === navService.activeTabId()
+                    ? 'bg-white border-t-primary-600 border-x border-slate-200 -mb-[1px] rounded-t-xl text-primary-700 shadow-sm z-10'
+                    : 'bg-transparent border-t-transparent border-x border-x-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100/50 rounded-t-lg'
+                " (click)="navService.activateTab(tab.id)">
           <span class="text-sm font-bold">{{ tab.title }}</span>
           <span class="hover:bg-slate-100 rounded-md p-0.5 transition-colors text-slate-400 hover:text-red-500"
             (click)="navService.closeTab(tab.id, $event)">
@@ -34,10 +35,18 @@
         @for (tab of navService.tabs(); track tab.id) {
         <div [class.hidden]="tab.id !== navService.activeTabId()" class="p-6">
           @switch (tab.type) {
-          @case ('main') { <app-main-page /> }
-          @case ('tasks') { <app-task-list /> }
-          @case ('users') { <app-user-list /> }
-          @case ('permissions') { <app-role-permission /> }
+          @case ('main') {
+          <app-main-page />
+          }
+          @case ('tasks') {
+          <app-task-list />
+          }
+          @case ('users') {
+          <app-user-list />
+          }
+          @case ('permissions') {
+          <app-role-permission />
+          }
           }
         </div>
         }
@@ -47,6 +56,8 @@
     <!-- Footer -->
     <app-footer />
   </div>
+  
+  <app-confirm-dialog />
 </div>
 } @else {
 <main class="min-h-screen">

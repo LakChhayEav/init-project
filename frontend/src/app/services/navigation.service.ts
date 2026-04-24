@@ -13,7 +13,7 @@ export interface AppTab {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class NavigationService {
   private readonly router = inject(Router);
@@ -24,8 +24,8 @@ export class NavigationService {
   readonly tabs = signal<AppTab[]>([]);
   readonly activeTabId = signal<string | null>(null);
 
-  readonly activeTab = computed(() =>
-    this.tabs().find(tab => tab.id === this.activeTabId()) ?? null
+  readonly activeTab = computed(
+    () => this.tabs().find((tab) => tab.id === this.activeTabId()) ?? null,
   );
 
   constructor() {
@@ -39,23 +39,23 @@ export class NavigationService {
   openMenuTab(type: MenuTabType): void {
     if (!this.permissionService.canView(type)) return;
 
-    const existing = this.tabs().find(tab => tab.type === type);
+    const existing = this.tabs().find((tab) => tab.type === type);
     if (existing) {
       this.activeTabId.set(existing.id);
     } else {
       const newTab: AppTab = {
         id: `${type}-${Date.now()}`,
         type,
-        title: this.langService.translate(`nav.${type}`)
+        title: this.langService.translate(`nav.${type}`),
       };
-      this.tabs.update(tabs => [...tabs, newTab]);
+      this.tabs.update((tabs) => [...tabs, newTab]);
       this.activeTabId.set(newTab.id);
     }
     this.router.navigate([`/${type}`]);
   }
 
   activateTab(tabId: string): void {
-    const target = this.tabs().find(tab => tab.id === tabId);
+    const target = this.tabs().find((tab) => tab.id === tabId);
     if (!target) return;
 
     this.activeTabId.set(tabId);
@@ -65,11 +65,11 @@ export class NavigationService {
   closeTab(tabId: string, event?: Event): void {
     event?.stopPropagation();
     const currentTabs = this.tabs();
-    const index = currentTabs.findIndex(tab => tab.id === tabId);
+    const index = currentTabs.findIndex((tab) => tab.id === tabId);
     if (index === -1) return;
 
     const wasActive = this.activeTabId() === tabId;
-    const remaining = currentTabs.filter(tab => tab.id !== tabId);
+    const remaining = currentTabs.filter((tab) => tab.id !== tabId);
     this.tabs.set(remaining);
 
     if (remaining.length === 0) {
@@ -90,10 +90,12 @@ export class NavigationService {
   }
 
   updateTabTitles(): void {
-    this.tabs.update(tabs => tabs.map(tab => ({
-      ...tab,
-      title: this.langService.translate(`nav.${tab.type}`)
-    })));
+    this.tabs.update((tabs) =>
+      tabs.map((tab) => ({
+        ...tab,
+        title: this.langService.translate(`nav.${tab.type}`),
+      })),
+    );
   }
 
   clearTabs(): void {
@@ -103,6 +105,6 @@ export class NavigationService {
 
   private getFirstAccessibleTab(): MenuTabType | null {
     const order: MenuTabType[] = ['main', 'tasks', 'users', 'permissions'];
-    return order.find(t => this.permissionService.canView(t)) ?? null;
+    return order.find((t) => this.permissionService.canView(t)) ?? null;
   }
 }

@@ -4,18 +4,19 @@ import { isPlatformBrowser } from '@angular/common';
 export type Language = 'en' | 'km';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LanguageService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
-  
+
   readonly currentLang = signal<Language>(this.getInitialLang());
 
   private readonly translations: Record<Language, Record<string, string>> = {
     en: {
       'app.title': 'TaskFlow Pro',
       'nav.main': 'Main',
+      'nav.security': 'Security',
       'nav.tasks': 'Tasks',
       'nav.users': 'Users',
       'nav.permissions': 'Permissions',
@@ -61,11 +62,12 @@ export class LanguageService {
       'task.new': 'Create New Task',
       'common.no_tasks': 'No tasks found. Create one to get started.',
       'common.completed': 'Completed',
-      'common.pending': 'Pending'
+      'common.pending': 'Pending',
     },
     km: {
       'app.title': 'ប្រព័ន្ធគ្រប់គ្រងការងារ',
       'nav.main': 'ទំព័រដើម',
+      'nav.security': 'សុវត្ថិភាព',
       'nav.tasks': 'ការងារ',
       'nav.users': 'អ្នកប្រើប្រាស់',
       'nav.permissions': 'សិទ្ធិប្រើប្រាស់',
@@ -111,8 +113,8 @@ export class LanguageService {
       'task.new': 'បង្កើតកិច្ចការថ្មី',
       'common.no_tasks': 'រកមិនឃើញកិច្ចការទេ។ បង្កើតមួយដើម្បីចាប់ផ្តើម។',
       'common.completed': 'បានបញ្ចប់',
-      'common.pending': 'កំពុងរង់ចាំ'
-    }
+      'common.pending': 'កំពុងរង់ចាំ',
+    },
   };
 
   translate(key: string): string {

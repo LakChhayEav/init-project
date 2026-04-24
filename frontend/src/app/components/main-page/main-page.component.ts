@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, signal, computed, inject, afterNextRender } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  signal,
+  computed,
+  inject,
+  afterNextRender,
+} from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -21,7 +28,7 @@ import { TranslatePipe } from '../../translate.pipe';
   imports: [ReactiveFormsModule, TranslatePipe],
   templateUrl: './main-page.component.html',
   styleUrls: ['./main-page.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainPageComponent {
   readonly authService = inject(AuthService);
@@ -40,7 +47,7 @@ export class MainPageComponent {
   readonly dashboardUsers = signal<DashboardUser[]>([
     { name: 'Sophia Kim', email: 'sophia.kim@example.com', role: 'Admin', status: 'Active' },
     { name: 'David Lee', email: 'david.lee@example.com', role: 'Manager', status: 'Active' },
-    { name: 'Ava Patel', email: 'ava.patel@example.com', role: 'Viewer', status: 'Pending' }
+    { name: 'Ava Patel', email: 'ava.patel@example.com', role: 'Viewer', status: 'Pending' },
   ]);
 
   readonly userRoles = ['Admin', 'Manager', 'Viewer'] as const;
@@ -48,19 +55,23 @@ export class MainPageComponent {
   // --- Forms ---
   readonly taskForm = this.fb.nonNullable.group({
     title: ['', Validators.required],
-    description: ['']
+    description: [''],
   });
 
   readonly userForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    role: ['Viewer']
+    role: ['Viewer'],
   });
 
   // --- Computed ---
   readonly totalUsers = computed(() => this.dashboardUsers().length);
-  readonly activeUsers = computed(() => this.dashboardUsers().filter(u => u.status === 'Active').length);
-  readonly pendingUsers = computed(() => this.dashboardUsers().filter(u => u.status === 'Pending').length);
+  readonly activeUsers = computed(
+    () => this.dashboardUsers().filter((u) => u.status === 'Active').length,
+  );
+  readonly pendingUsers = computed(
+    () => this.dashboardUsers().filter((u) => u.status === 'Pending').length,
+  );
 
   // --- User popup ---
   openUserPopup(): void {
@@ -90,9 +101,9 @@ export class MainPageComponent {
       return;
     }
 
-    this.dashboardUsers.update(users => [
+    this.dashboardUsers.update((users) => [
       { name: trimmedName, email: trimmedEmail, role: role.trim(), status: 'Active' as const },
-      ...users
+      ...users,
     ]);
 
     this.userForm.reset({ name: '', email: '', role: 'Viewer' });
@@ -108,11 +119,11 @@ export class MainPageComponent {
       return;
     }
 
-    this.dashboardUsers.update(users => [
+    this.dashboardUsers.update((users) => [
       { name: name.trim(), email: email.trim(), role: 'User', status: 'Active' as const },
-      ...users
+      ...users,
     ]);
-    
+
     this.userMessage.set('User added successfully.');
     this.userFormError.set(false);
     setTimeout(() => this.closeUserPopup(), 1000);
@@ -133,7 +144,7 @@ export class MainPageComponent {
     const taskToCreate: Task = {
       title: trimmedTitle,
       description: description?.trim() ?? '',
-      completed: false
+      completed: false,
     };
 
     this.taskService.createTask(taskToCreate).subscribe({
@@ -148,7 +159,7 @@ export class MainPageComponent {
         this.formMessage.set('Unable to submit form. Please try again.');
         this.formError.set(true);
         this.isSubmitting.set(false);
-      }
+      },
     });
   }
 }

@@ -9,37 +9,54 @@
   </div>
 
   <nav class="flex-1 px-4 space-y-2">
-    @if (permissionService.canView('main')) {
-      <button type="button" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all"
-        [class]="navService.isTabTypeActive('main') ? 'bg-primary-700 text-white shadow-md' : 'text-primary-100 hover:bg-primary-800'"
-        (click)="navService.openMenuTab('main')">
-        <i class="bi bi-grid-1x2"></i> {{ 'nav.main' | translate }}
-      </button>
-    }
+    <!-- @if (permissionService.canView('main')) { -->
+    <button type="button" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all"
+      [class]="navService.isTabTypeActive('main') ? 'bg-primary-700 text-white shadow-md' : 'text-primary-100 hover:bg-primary-800'"
+      (click)="navService.openMenuTab('main')">
+      <i class="bi bi-grid-1x2"></i> {{ 'nav.main' | translate }}
+    </button>
+    <!-- } -->
 
-    @if (permissionService.canView('tasks')) {
-      <button type="button" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all"
-        [class]="navService.isTabTypeActive('tasks') ? 'bg-primary-700 text-white shadow-md' : 'text-primary-100 hover:bg-primary-800'"
-        (click)="navService.openMenuTab('tasks')">
-        <i class="bi bi-list-check"></i> {{ 'nav.tasks' | translate }}
-      </button>
-    }
+    <!-- @if (permissionService.canView('tasks')) { -->
+    <button type="button" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all"
+      [class]="navService.isTabTypeActive('tasks') ? 'bg-primary-700 text-white shadow-md' : 'text-primary-100 hover:bg-primary-800'"
+      (click)="navService.openMenuTab('tasks')">
+      <i class="bi bi-list-check"></i> {{ 'nav.tasks' | translate }}
+    </button>
+    <!-- } -->
 
-    @if (permissionService.canView('users')) {
-      <button type="button" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all"
-        [class]="navService.isTabTypeActive('users') ? 'bg-primary-700 text-white shadow-md' : 'text-primary-100 hover:bg-primary-800'"
-        (click)="navService.openMenuTab('users')">
-        <i class="bi bi-people"></i> {{ 'nav.users' | translate }}
+    <!-- @if (permissionService.canView('users') || permissionService.canView('permissions')) { -->
+    <div class="space-y-1">
+      <button type="button" class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg transition-all text-primary-100 hover:bg-primary-800"
+        (click)="toggleSecurityMenu()">
+        <div class="flex items-center gap-3">
+          <i class="bi bi-shield-check"></i>
+          <span>{{ 'nav.security' | translate }}</span>
+        </div>
+        <i class="bi text-sm transition-transform" [class.bi-chevron-down]="isSecurityMenuOpen()" [class.bi-chevron-right]="!isSecurityMenuOpen()"></i>
       </button>
-    }
 
-    @if (permissionService.canView('permissions')) {
-      <button type="button" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all"
-        [class]="navService.isTabTypeActive('permissions') ? 'bg-primary-700 text-white shadow-md' : 'text-primary-100 hover:bg-primary-800'"
-        (click)="navService.openMenuTab('permissions')">
-        <i class="bi bi-shield-lock"></i> {{ 'nav.permissions' | translate }}
-      </button>
-    }
+      @if (isSecurityMenuOpen()) {
+      <div class="pl-11 pr-2 space-y-1">
+        <!-- @if (permissionService.canView('users')) { -->
+        <button type="button" class="w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-all text-sm"
+          [class]="navService.isTabTypeActive('users') ? 'bg-primary-700 text-white shadow-md' : 'text-primary-200 hover:bg-primary-800 hover:text-white'"
+          (click)="navService.openMenuTab('users')">
+          <i class="bi bi-people"></i> {{ 'nav.users' | translate }}
+        </button>
+        <!-- } -->
+
+        <!-- @if (permissionService.canView('permissions')) { -->
+        <button type="button" class="w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-all text-sm"
+          [class]="navService.isTabTypeActive('permissions') ? 'bg-primary-700 text-white shadow-md': 'text-primary-200 hover:bg-primary-800 hover:text-white'"
+          (click)="navService.openMenuTab('permissions')">
+          <i class="bi bi-shield-lock"></i> {{ 'nav.permissions' | translate }}
+        </button>
+        <!-- } -->
+      </div>
+      }
+    </div>
+    <!-- } -->
   </nav>
 
   <div class="p-4 border-t border-primary-800">

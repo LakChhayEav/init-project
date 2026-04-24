@@ -1,34 +1,38 @@
-import { 
-  Component, 
-  ChangeDetectionStrategy, 
-  signal, 
-  computed, 
-  inject, 
-  afterNextRender, 
+import {
+  Component,
+  ChangeDetectionStrategy,
+  signal,
+  computed,
+  inject,
+  afterNextRender,
   effect,
-  PLATFORM_ID
+  PLATFORM_ID,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { PermissionService } from '../../services/permission.service';
+import { ConfirmService } from '../../services/confirm.service';
 import { PageRequest } from '../../models/pagination.model';
 
 import { TranslatePipe } from '../../translate.pipe';
+import { TableModule } from '../shared/table/table.module';
+import { TableColumn } from '../shared/table/table.component';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [ReactiveFormsModule, TranslatePipe],
+  imports: [ReactiveFormsModule, TranslatePipe, TableModule],
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserListComponent {
   private readonly userService = inject(UserService);
   private readonly fb = inject(FormBuilder);
   readonly permissionService = inject(PermissionService);
+  private readonly confirmService = inject(ConfirmService);
 
   // --- State ---
   readonly users = signal<User[]>([]);
@@ -46,7 +50,7 @@ export class UserListComponent {
   readonly filterForm = this.fb.nonNullable.group({
     search: [''],
     status: ['all' as 'all' | 'active' | 'inactive'],
-    role: ['all']
+    role: ['all'],
   });
 
   // --- User create/edit form ---
@@ -55,26 +59,23 @@ export class UserListComponent {
     email: ['', [Validators.required, Validators.email]],
     password: [''],
     enabled: [true],
-    role: ['USER']
+    roles: [['USER']],
   });
+
+  readonly columns: TableColumn[] = [
+    { key: 'username', label: 'user.username' },
+    { key: 'enabled', label: 'common.status' },
+    { key: 'roles', label: 'user.roles' },
+    { key: 'actions', label: 'common.actions', align: 'right' },
+  ];
 
   // --- Computed ---
   readonly roleOptions = computed<string[]>(() => {
     const dynamic = this.users()
-      .flatMap(u => (u.roles ?? []).map(r => r.name))
+      .flatMap((u) => (u.roles ?? []).map((r) => r.name))
       .filter(Boolean);
     return [...new Set(['ADMIN', 'MANAGER', 'USER', ...dynamic])];
   });
-
-  readonly totalPages = computed(() =>
-    Math.max(1, Math.ceil(this.totalElements() / this.pageSize()))
-  );
-
-  readonly paginatedUsers = computed(() => this.users());
-
-  readonly pageNumbers = computed(() =>
-    Array.from({ length: this.totalPages() }, (_, i) => i + 1)
-  );
 
   constructor() {
     afterNextRender(() => {
@@ -87,9 +88,6 @@ export class UserListComponent {
         this.loadUsers();
       });
     }
-
-    // No auto-search on valueChanges to support manual search trigger
-
   }
 
   // --- Data ---
@@ -97,10 +95,10 @@ export class UserListComponent {
     const { search } = this.filterForm.value;
     const request: PageRequest = {
       page: this.currentPage(),
-      size: this.pageSize()
+      size: this.pageSize(),
     };
 
-    this.userService.getPagedUsers(request, search).subscribe(response => {
+    this.userService.getPagedUsers(request, search).subscribe((response) => {
       this.users.set(response.content);
       this.totalElements.set(response.totalElements);
       this.normalizeCurrentPage();
@@ -119,7 +117,7 @@ export class UserListComponent {
 
   resetFilters(): void {
     this.filterForm.reset({ search: '', status: 'all', role: 'all' });
-    this.currentPage.set(1);
+    this.currentPage.set(0);
   }
 
   // --- Pagination ---
@@ -129,9 +127,7 @@ export class UserListComponent {
   }
 
   goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages()) {
-      this.currentPage.set(page - 1);
-    }
+    this.currentPage.set(page - 1);
   }
 
   // --- CRUD ---
@@ -141,7 +137,7 @@ export class UserListComponent {
     this.isEditMode.set(false);
     this.activeUserId.set(null);
     this.clearMessages();
-    this.userForm.reset({ username: '', email: '', password: '', enabled: true, role: 'USER' });
+    this.userForm.reset({ username: '', email: '', password: '', enabled: true, roles: ['USER'] });
     this.isPopupOpen.set(true);
   }
 
@@ -156,7 +152,7 @@ export class UserListComponent {
       email: user.email,
       password: '',
       enabled: user.enabled,
-      role: user.roles?.[0]?.name ?? 'USER'
+      roles: user.roles?.map(r => r.name) ?? ['USER'],
     });
     this.isPopupOpen.set(true);
   }
@@ -170,12 +166,12 @@ export class UserListComponent {
     if (editing && !this.permissionService.canUpdate('users')) return;
     if (!editing && !this.permissionService.canCreate('users')) return;
 
-    const { username, email, password, enabled, role } = this.userForm.getRawValue();
+    const { username, email, password, enabled, roles } = this.userForm.getRawValue();
     const trimmed = {
       username: username.trim(),
       email: email.trim(),
       password: password.trim(),
-      role: role || 'USER'
+      roles: roles && roles.length > 0 ? roles : ['USER'],
     };
 
     if (!trimmed.username || !trimmed.email) {
@@ -192,35 +188,68 @@ export class UserListComponent {
       username: trimmed.username,
       email: trimmed.email,
       enabled: !!enabled,
-      roles: [{ name: trimmed.role }],
-      ...(trimmed.password ? { password: trimmed.password } : {})
+      roles: trimmed.roles.map(r => ({ name: r })),
+      ...(trimmed.password ? { password: trimmed.password } : {}),
     };
 
-    const request$ = editing && this.activeUserId()
-      ? this.userService.updateUser(this.activeUserId()!, payload)
-      : this.userService.createUser(payload);
+    const executeRequest = () => {
+      const request$ =
+        editing && this.activeUserId()
+          ? this.userService.updateUser(this.activeUserId()!, payload)
+          : this.userService.createUser(payload);
 
-    request$.subscribe({
-      next: () => {
-        this.closePopup();
-        this.loadUsers();
-      },
-      error: () => this.setError(editing ? 'Failed to update user.' : 'Failed to create user.')
-    });
+      request$.subscribe({
+        next: () => {
+          this.closePopup();
+          this.loadUsers();
+        },
+        error: () => this.setError(editing ? 'Failed to update user.' : 'Failed to create user.'),
+      });
+    };
+
+    if (editing) {
+      this.confirmService.open({
+        title: 'Update User',
+        message: 'Are you sure you want to save these changes?',
+        confirmText: 'Save',
+        onConfirm: executeRequest
+      });
+    } else {
+      executeRequest();
+    }
   }
 
   toggleUser(user: User): void {
     if (!this.permissionService.canUpdate('users')) return;
 
-    this.userService.updateUser(user.id!, user).subscribe({
-      error: () => { user.enabled = !user.enabled; }
+    this.confirmService.open({
+      title: 'Update User Status',
+      message: 'Are you sure you want to update this user\'s status?',
+      confirmText: 'Update',
+      onConfirm: () => {
+        this.userService.updateUser(user.id!, user).subscribe({
+          error: () => {
+            user.enabled = !user.enabled; // revert on error
+          },
+        });
+      },
+      onCancel: () => {
+        user.enabled = !user.enabled; // revert visually
+      }
     });
   }
 
   deleteUser(id: number): void {
     if (!this.permissionService.canDelete('users')) return;
 
-    this.userService.deleteUser(id).subscribe(() => this.loadUsers());
+    this.confirmService.open({
+      title: 'Delete User',
+      message: 'Are you sure you want to delete this user? This action cannot be undone.',
+      confirmText: 'Delete',
+      onConfirm: () => {
+        this.userService.deleteUser(id).subscribe(() => this.loadUsers());
+      }
+    });
   }
 
   // --- Helpers ---
@@ -235,7 +264,7 @@ export class UserListComponent {
   }
 
   private normalizeCurrentPage(): void {
-    const total = this.totalPages();
-    this.currentPage.update(page => Math.max(0, Math.min(page, total - 1)));
+    const total = Math.max(1, Math.ceil(this.totalElements() / this.pageSize()));
+    this.currentPage.update((page) => Math.max(0, Math.min(page, total - 1)));
   }
 }

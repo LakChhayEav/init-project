@@ -1,0 +1,136 @@
+<div class="card-pro overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-left">
+      <thead class="bg-slate-50 border-b border-slate-200">
+        <tr>
+          @for (col of columns; track col.key) {
+            <th
+              [class]="
+                'px-4 py-2.5 text-sm font-bold text-slate-500 uppercase tracking-wider ' +
+                (col.align === 'right' ? 'text-right ' : '') +
+                (col.className || '')
+              "
+            >
+              {{ col.label | translate }}
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-200">
+        @if (isLoading) {
+          <tr>
+            <td [attr.colspan]="columns.length" class="px-6 py-12 text-center">
+              <div class="flex items-center justify-center gap-3 text-primary-600">
+                <div
+                  class="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin"
+                ></div>
+                <span class="font-medium">Loading data...</span>
+              </div>
+            </td>
+          </tr>
+        } @else if (data.length === 0) {
+          <tr>
+            <td
+              [attr.colspan]="columns.length"
+              class="px-6 py-12 text-center text-slate-500 italic"
+            >
+              <i class="bi bi-inbox text-4xl block mb-2 opacity-20"></i>
+              No data found.
+            </td>
+          </tr>
+        } @else {
+          @for (row of data; track row.id || $index) {
+            <tr class="hover:bg-slate-50/80 transition-colors group">
+              @for (col of columns; track col.key) {
+                <td
+                  [class]="
+                    'px-4 py-1.5 whitespace-nowrap ' + (col.align === 'right' ? 'text-right ' : '')
+                  "
+                >
+                  <ng-container
+                    *ngTemplateOutlet="
+                      cellTemplate || defaultCell;
+                      context: { $implicit: row[col.key], row: row, column: col }
+                    "
+                  ></ng-container>
+                </td>
+              }
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  @if (totalElements > 0) {
+    <div
+      class="px-4 py-2 bg-slate-50 border-t border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4"
+    >
+      <div class="flex items-center gap-4">
+        <span class="text-sm font-medium text-slate-500">
+          {{ 'common.showing' | translate }}
+          <span class="text-slate-900 font-bold">{{ data.length }}</span>
+          {{ 'common.of' | translate }}
+          <span class="text-slate-900 font-bold">{{ totalElements }}</span>
+        </span>
+
+        <div class="flex items-center gap-2">
+          <label class="text-sm font-medium text-slate-500">{{
+            'common.rows_per_page' | translate
+          }}</label>
+          <select
+            class="bg-white border border-slate-300 rounded px-1.5 py-0.5 text-sm focus:ring-1 focus:ring-primary-500 focus:outline-none"
+            [value]="pageSize"
+            (change)="onSizeChange($event)"
+          >
+            @for (option of pageSizeOptions; track option) {
+              <option [value]="option">{{ option }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-1">
+        <button
+          type="button"
+          class="p-1.5 rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-xs"
+          [disabled]="currentPage === 0"
+          (click)="onPageChange(currentPage)"
+        >
+          <i class="bi bi-chevron-left"></i>
+        </button>
+
+        <div class="flex items-center gap-1 mx-2">
+          @for (page of pageNumbers; track page) {
+            <button
+              type="button"
+              class="w-7 h-7 flex items-center justify-center rounded-md text-sm font-bold transition-all"
+              [class]="
+                page === currentPage + 1
+                  ? 'bg-primary-600 text-white shadow-md shadow-primary-200'
+                  : 'bg-white border border-slate-200 text-slate-600 hover:border-primary-300'
+              "
+              (click)="onPageChange(page)"
+            >
+              {{ page }}
+            </button>
+          }
+        </div>
+
+        <button
+          type="button"
+          class="p-1.5 rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-xs"
+          [disabled]="currentPage === totalPages - 1"
+          (click)="onPageChange(currentPage + 2)"
+        >
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  }
+</div>
+
+<ng-template #defaultCell let-value let-row="row" let-col="column">
+  <span class="text-sm text-slate-600">{{ value }}</span>
+</ng-template>

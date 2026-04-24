@@ -6,6 +6,6 @@ import { TranslatePipe } from '../../../translate.pipe';
   standalone: true,
   imports: [TranslatePipe],
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.css'
+  styleUrl: './footer.component.css',
 })
 export class FooterComponent {}

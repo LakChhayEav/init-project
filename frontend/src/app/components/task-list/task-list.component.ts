@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { TaskService } from '../../services/task.service';
 import { Task } from '../../models/task.model';
 import { PermissionService } from '../../services/permission.service';
+import { ConfirmService } from '../../services/confirm.service';
 
 import { TranslatePipe } from '../../translate.pipe';
 
@@ -13,11 +14,12 @@ import { TranslatePipe } from '../../translate.pipe';
   imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskListComponent {
   private taskService = inject(TaskService);
   public permissionService = inject(PermissionService);
+  private confirmService = inject(ConfirmService);
   private fb = inject(FormBuilder);
 
   tasks = signal<Task[]>([]);
@@ -25,7 +27,7 @@ export class TaskListComponent {
 
   taskForm = this.fb.group({
     title: ['', Validators.required],
-    description: ['']
+    description: [''],
   });
 
   constructor() {
@@ -33,7 +35,7 @@ export class TaskListComponent {
   }
 
   loadTasks(): void {
-    this.taskService.getTasks().subscribe(tasks => this.tasks.set(tasks));
+    this.taskService.getTasks().subscribe((tasks) => this.tasks.set(tasks));
   }
 
   addTask(): void {
@@ -51,16 +53,34 @@ export class TaskListComponent {
   toggleTask(task: Task, event: Event): void {
     if (!this.permissionService.canUpdate('tasks')) return;
 
-    const checked = (event.target as HTMLInputElement).checked;
+    const target = event.target as HTMLInputElement;
+    const checked = target.checked;
 
-    this.taskService
-      .updateTask(task.id!, { ...task, completed: checked })
-      .subscribe(() => this.loadTasks());
+    this.confirmService.open({
+      title: 'Update Task',
+      message: 'Are you sure you want to update this task\'s status?',
+      confirmText: 'Update',
+      onConfirm: () => {
+        this.taskService
+          .updateTask(task.id!, { ...task, completed: checked })
+          .subscribe(() => this.loadTasks());
+      },
+      onCancel: () => {
+        target.checked = !checked; // revert
+      }
+    });
   }
 
   deleteTask(id: number): void {
     if (!this.permissionService.canDelete('tasks')) return;
 
-    this.taskService.deleteTask(id).subscribe(() => this.loadTasks());
+    this.confirmService.open({
+      title: 'Delete Task',
+      message: 'Are you sure you want to delete this task? This action cannot be undone.',
+      confirmText: 'Delete',
+      onConfirm: () => {
+        this.taskService.deleteTask(id).subscribe(() => this.loadTasks());
+      }
+    });
   }
 }

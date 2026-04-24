@@ -5,7 +5,7 @@ import { Task } from '../models/task.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TaskService {
   private readonly http = inject(HttpClient);

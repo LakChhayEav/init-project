@@ -1,0 +1,4 @@
+/* Custom table styles if needed beyond Tailwind */
+:host {
+  display: block;
+}

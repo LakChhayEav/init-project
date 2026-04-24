@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -11,13 +11,19 @@ import { TranslatePipe } from '../../../translate.pipe';
   standalone: true,
   imports: [CommonModule, TranslatePipe],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css'
+  styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent {
   readonly authService = inject(AuthService);
   readonly navService = inject(NavigationService);
   readonly permissionService = inject(PermissionService);
   private readonly router = inject(Router);
+
+  readonly isSecurityMenuOpen = signal(false);
+
+  toggleSecurityMenu(): void {
+    this.isSecurityMenuOpen.update((v) => !v);
+  }
 
   logout(): void {
     this.authService.logout();

@@ -11,7 +11,7 @@ import { TranslatePipe } from '../../translate.pipe';
   imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.css'
+  styleUrl: './signup.component.css',
 })
 export class SignupComponent {
   private readonly authService = inject(AuthService);
@@ -24,7 +24,7 @@ export class SignupComponent {
   readonly signupForm = this.fb.nonNullable.group({
     username: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required]
+    password: ['', Validators.required],
   });
 
   register(): void {
@@ -35,7 +35,7 @@ export class SignupComponent {
         this.success.set(true);
         setTimeout(() => this.router.navigate(['/login']), 2000);
       },
-      error: () => this.error.set('Registration failed. Username or email might be taken.')
+      error: () => this.error.set('Registration failed. Username or email might be taken.'),
     });
   }
 }

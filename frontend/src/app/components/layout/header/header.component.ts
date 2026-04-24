@@ -8,7 +8,7 @@ import { LanguageService, Language } from '../../../services/language.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrl: './header.component.css',
 })
 export class HeaderComponent {
   readonly authService = inject(AuthService);
