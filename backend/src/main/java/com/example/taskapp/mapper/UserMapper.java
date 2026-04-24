@@ -3,6 +3,7 @@ package com.example.taskapp.mapper;
 import com.example.taskapp.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -15,7 +16,12 @@ public interface UserMapper {
     void update(User user);
     void delete(Integer id);
     
-    void addRoleToUser(@Param("userId") Integer userId, @Param("roleId") Integer roleId);
+    void addRoleToUser(@Param("userId") Integer userId, 
+                       @Param("roleId") Integer roleId,
+                       @Param("createdBy") String createdBy,
+                       @Param("createdDate") LocalDateTime createdDate,
+                       @Param("updatedBy") String updatedBy,
+                       @Param("updatedDate") LocalDateTime updatedDate);
     void removeRoleFromUser(@Param("userId") Integer userId, @Param("roleId") Integer roleId);
     void removeAllRolesFromUser(Integer userId);
 }

@@ -5,9 +5,11 @@ import com.example.taskapp.mapper.UserMapper;
 import com.example.taskapp.model.PageResponse;
 import com.example.taskapp.model.Role;
 import com.example.taskapp.model.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -40,13 +42,17 @@ public class UserService {
     @Transactional
     public void createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        String currentUser = getCurrentUser();
+        LocalDateTime now = LocalDateTime.now();
+        user.setCreatedBy(currentUser);
+        user.setCreatedDate(now);
         userMapper.insert(user);
         
         if (user.getRoles() != null) {
             for (Role role : user.getRoles()) {
                 Role existingRole = roleMapper.findByName(role.getName());
                 if (existingRole != null) {
-                    userMapper.addRoleToUser(user.getId(), existingRole.getId());
+                    userMapper.addRoleToUser(user.getId(), existingRole.getId(), currentUser, now, null, null);
                 }
             }
         }
@@ -57,6 +63,10 @@ public class UserService {
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
+        String currentUser = getCurrentUser();
+        LocalDateTime now = LocalDateTime.now();
+        user.setUpdatedBy(currentUser);
+        user.setUpdatedDate(now);
         userMapper.update(user);
         
         userMapper.removeAllRolesFromUser(user.getId());
@@ -64,7 +74,7 @@ public class UserService {
             for (Role role : user.getRoles()) {
                 Role existingRole = roleMapper.findByName(role.getName());
                 if (existingRole != null) {
-                    userMapper.addRoleToUser(user.getId(), existingRole.getId());
+                    userMapper.addRoleToUser(user.getId(), existingRole.getId(), currentUser, now, currentUser, now);
                 }
             }
         }
@@ -76,11 +86,20 @@ public class UserService {
 
     @Transactional
     public void addRoleToUser(Integer userId, Integer roleId) {
-        userMapper.addRoleToUser(userId, roleId);
+        String currentUser = getCurrentUser();
+        LocalDateTime now = LocalDateTime.now();
+        userMapper.addRoleToUser(userId, roleId, currentUser, now, null, null);
     }
 
     @Transactional
     public void removeRoleFromUser(Integer userId, Integer roleId) {
         userMapper.removeRoleFromUser(userId, roleId);
+    }
+
+    private String getCurrentUser() {
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            return "SYSTEM";
+        }
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

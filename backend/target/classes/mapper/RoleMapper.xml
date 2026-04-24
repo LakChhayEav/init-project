@@ -4,6 +4,11 @@
     <resultMap id="RoleMap" type="com.example.taskapp.model.Role">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedDate" column="updated_date"/>
         <collection property="permissions" column="id" select="com.example.taskapp.mapper.PermissionMapper.findByRoleId"/>
     </resultMap>
 
@@ -22,16 +27,23 @@
         WHERE ur.user_id = #{userId}
     </select>
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO roles (name) VALUES (#{name})
+        INSERT INTO roles (name, description, created_by, created_date, updated_by, updated_date) 
+        VALUES (#{name}, #{description}, #{createdBy}, #{createdDate}, #{updatedBy}, #{updatedDate})
     </insert>
     <update id="update">
-        UPDATE roles SET name = #{name} WHERE id = #{id}
+        UPDATE roles 
+        SET name = #{name}, 
+            description = #{description}, 
+            updated_by = #{updatedBy}, 
+            updated_date = #{updatedDate} 
+        WHERE id = #{id}
     </update>
     <delete id="delete">
         DELETE FROM roles WHERE id = #{id}
     </delete>
     <insert id="addPermissionToRole">
-        INSERT INTO role_permissions (role_id, permission_id) VALUES (#{roleId}, #{permissionId})
+        INSERT INTO role_permissions (role_id, permission_id, created_by, created_date, updated_by, updated_date) 
+        VALUES (#{roleId}, #{permissionId}, #{createdBy}, #{createdDate}, #{updatedBy}, #{updatedDate})
     </insert>
     <delete id="removePermissionFromRole">
         DELETE FROM role_permissions WHERE role_id = #{roleId} AND permission_id = #{permissionId}

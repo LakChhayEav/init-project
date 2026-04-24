@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, inject, signal, afterNextRender } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { PermissionService, AppFeature, AppCapability } from '../../services/permission.service';
@@ -11,7 +11,7 @@ import { TranslatePipe } from '../../translate.pipe';
 @Component({
   selector: 'app-role-permission',
   standalone: true,
-  imports: [CommonModule, TranslatePipe, ReactiveFormsModule],
+  imports: [CommonModule, DatePipe, TranslatePipe, ReactiveFormsModule],
   templateUrl: './role-permission.component.html',
   styleUrl: './role-permission.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +37,7 @@ export class RolePermissionComponent {
 
   readonly roleForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
+    description: [''],
   });
 
   constructor() {
@@ -102,14 +103,14 @@ export class RolePermissionComponent {
   openCreatePopup(): void {
     this.isEditMode.set(false);
     this.activeRoleId.set(null);
-    this.roleForm.reset({ name: '' });
+    this.roleForm.reset({ name: '', description: '' });
     this.isPopupOpen.set(true);
   }
 
   openEditPopup(role: Role): void {
     this.isEditMode.set(true);
     this.activeRoleId.set(role.id ?? null);
-    this.roleForm.patchValue({ name: role.name });
+    this.roleForm.patchValue({ name: role.name, description: role.description });
     this.isPopupOpen.set(true);
   }
 
@@ -118,11 +119,11 @@ export class RolePermissionComponent {
   }
 
   submitRoleForm(): void {
-    const { name } = this.roleForm.getRawValue();
+    const { name, description } = this.roleForm.getRawValue();
     const trimmedName = name.trim().toUpperCase();
     if (!trimmedName) return;
 
-    const payload = { name: trimmedName } as Role;
+    const payload = { name: trimmedName, description: description.trim() } as Role;
 
     const executeRequest = () => {
       const request$ = this.isEditMode() && this.activeRoleId()

@@ -13,10 +13,16 @@
         WHERE rp.role_id = #{roleId}
     </select>
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO permissions (name, description) VALUES (#{name}, #{description})
+        INSERT INTO permissions (name, description, created_by, created_date, updated_by, updated_date) 
+        VALUES (#{name}, #{description}, #{createdBy}, #{createdDate}, #{updatedBy}, #{updatedDate})
     </insert>
     <update id="update">
-        UPDATE permissions SET name = #{name}, description = #{description} WHERE id = #{id}
+        UPDATE permissions 
+        SET name = #{name}, 
+            description = #{description}, 
+            updated_by = #{updatedBy}, 
+            updated_date = #{updatedDate} 
+        WHERE id = #{id}
     </update>
     <delete id="delete">
         DELETE FROM permissions WHERE id = #{id}

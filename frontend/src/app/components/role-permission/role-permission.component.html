@@ -55,32 +55,49 @@
             </th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-100">
+        <tbody>
           @for (role of roles(); track role.id) {
-            @for (feature of features; track feature; let first = $first) {
-              <tr class="hover:bg-slate-50/50 transition-colors">
-                <td class="px-4 py-1.5 whitespace-nowrap">
-                  @if (first) {
-                    <div class="flex items-center gap-2">
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-100 text-primary-700 border border-primary-200 uppercase">
-                        {{ role.name }}
-                      </span>
-                      @if (role.name !== 'ADMIN') {
-                        <button class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-md transition-all" (click)="openEditPopup(role)">
-                          <i class="bi bi-pencil-square"></i>
-                        </button>
-                        <button class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-all" (click)="deleteRole(role.id!)">
-                          <i class="bi bi-trash3"></i>
-                        </button>
+            @for (feature of features; track feature; let first = $first; let fi = $index) {
+              <tr [class]="'transition-colors ' + (first ? 'border-t border-slate-200' : 'border-t border-slate-100 hover:bg-slate-50/50')">
+                @if (first) {
+                  <td class="px-4 py-3 whitespace-nowrap align-middle border-r border-slate-100" [attr.rowspan]="features.length">
+                    <div class="space-y-2">
+                      <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary-100 text-primary-700 border border-primary-200 uppercase">
+                          {{ role.name }}
+                        </span>
+                        @if (role.name !== 'ADMIN') {
+                          <button class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-md transition-all" (click)="openEditPopup(role)">
+                            <i class="bi bi-pencil-square"></i>
+                          </button>
+                          <button class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-all" (click)="deleteRole(role.id!)">
+                            <i class="bi bi-trash3"></i>
+                          </button>
+                        }
+                      </div>
+                      @if (role.description) {
+                        <p class="text-[11px] text-slate-500 font-medium italic max-w-[200px] break-words line-clamp-2" [title]="role.description">
+                          {{ role.description }}
+                        </p>
                       }
+                      <div class="flex flex-col gap-0.5 opacity-60">
+                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">
+                          {{ 'common.created_date' | translate }}: {{ role.createdDate | date:'yyyy-MM-dd' }} {{ 'common.by' | translate }} {{ role.createdBy }}
+                        </span>
+                        @if (role.updatedDate) {
+                          <span class="text-[9px] text-slate-400 font-bold uppercase tracking-tighter">
+                            {{ 'common.updated_date' | translate }}: {{ role.updatedDate | date:'yyyy-MM-dd' }} {{ 'common.by' | translate }} {{ role.updatedBy }}
+                          </span>
+                        }
+                      </div>
                     </div>
-                  }
-                </td>
-                <td class="px-4 py-1.5 whitespace-nowrap">
+                  </td>
+                }
+                <td class="px-4 py-2 whitespace-nowrap hover:bg-slate-50/50 transition-colors">
                   <span class="text-sm font-bold text-slate-700 capitalize">{{ feature }}</span>
                 </td>
                 @for (cap of capabilities; track cap) {
-                  <td class="px-4 py-1.5 text-center">
+                  <td class="px-4 py-2 text-center hover:bg-slate-50/50 transition-colors">
                     <input
                       type="checkbox"
                       class="w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500 transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
@@ -118,6 +135,11 @@
           <div class="space-y-1">
             <label class="label-pro">{{ 'role.name' | translate }}</label>
             <input formControlName="name" class="input-pro uppercase" [placeholder]="'role.name_placeholder' | translate" />
+          </div>
+
+          <div class="space-y-1">
+            <label class="label-pro">{{ 'common.description' | translate }}</label>
+            <textarea formControlName="description" class="input-pro h-20 resize-none" [placeholder]="'common.description' | translate"></textarea>
           </div>
 
           <div class="pt-6 flex gap-3">

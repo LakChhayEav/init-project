@@ -8,7 +8,7 @@ import {
   effect,
   PLATFORM_ID,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
@@ -23,7 +23,7 @@ import { TableColumn } from '../shared/table/table.component';
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [ReactiveFormsModule, TranslatePipe, TableModule],
+  imports: [CommonModule, DatePipe, ReactiveFormsModule, TranslatePipe, TableModule],
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -66,6 +66,8 @@ export class UserListComponent {
     { key: 'username', label: 'user.username' },
     { key: 'enabled', label: 'common.status' },
     { key: 'roles', label: 'user.roles' },
+    { key: 'createdDate', label: 'common.created_date' },
+    { key: 'updatedDate', label: 'common.updated_date' },
     { key: 'actions', label: 'common.actions', align: 'right' },
   ];
 

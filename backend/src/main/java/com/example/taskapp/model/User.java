@@ -9,18 +9,21 @@ public class User {
     private String email;
     private String password;
     private boolean enabled;
-    private LocalDateTime createdAt;
+    private String createdBy;
+    private LocalDateTime createdDate;
+    private String updatedBy;
+    private LocalDateTime updatedDate;
     private List<Role> roles;
 
     public User() {}
 
-    public User(Integer id, String username, String email, String password, boolean enabled, LocalDateTime createdAt, List<Role> roles) {
+    public User(Integer id, String username, String email, String password, boolean enabled, LocalDateTime createdDate, List<Role> roles) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.enabled = enabled;
-        this.createdAt = createdAt;
+        this.createdDate = createdDate;
         this.roles = roles;
     }
 
@@ -39,8 +42,17 @@ public class User {
     public boolean isEnabled() { return enabled; }
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getCreatedBy() { return createdBy; }
+    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
+
+    public LocalDateTime getCreatedDate() { return createdDate; }
+    public void setCreatedDate(LocalDateTime createdDate) { this.createdDate = createdDate; }
+
+    public String getUpdatedBy() { return updatedBy; }
+    public void setUpdatedBy(String updatedBy) { this.updatedBy = updatedBy; }
+
+    public LocalDateTime getUpdatedDate() { return updatedDate; }
+    public void setUpdatedDate(LocalDateTime updatedDate) { this.updatedDate = updatedDate; }
 
     public List<Role> getRoles() { return roles; }
     public void setRoles(List<Role> roles) { this.roles = roles; }
