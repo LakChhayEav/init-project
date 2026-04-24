@@ -17,4 +17,5 @@ public interface UserMapper {
     
     void addRoleToUser(@Param("userId") Integer userId, @Param("roleId") Integer roleId);
     void removeRoleFromUser(@Param("userId") Integer userId, @Param("roleId") Integer roleId);
+    void removeAllRolesFromUser(Integer userId);
 }

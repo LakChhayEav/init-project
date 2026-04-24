@@ -9,6 +9,7 @@ import java.util.List;
 public interface RoleMapper {
     List<Role> findAll();
     Role findById(Integer id);
+    Role findByName(String name);
     void insert(Role role);
     void update(Role role);
     void delete(Integer id);
@@ -16,4 +17,5 @@ public interface RoleMapper {
     
     void addPermissionToRole(@Param("roleId") Integer roleId, @Param("permissionId") Integer permissionId);
     void removePermissionFromRole(@Param("roleId") Integer roleId, @Param("permissionId") Integer permissionId);
+    void removeAllPermissionsFromRole(Integer roleId);
 }

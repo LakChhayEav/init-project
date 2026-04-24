@@ -13,6 +13,9 @@
     <select id="findById" resultMap="RoleMap">
         SELECT * FROM roles WHERE id = #{id}
     </select>
+    <select id="findByName" resultMap="RoleMap">
+        SELECT * FROM roles WHERE name = #{name}
+    </select>
     <select id="findByUserId" resultMap="RoleMap">
         SELECT r.* FROM roles r
         JOIN user_roles ur ON r.id = ur.role_id
@@ -32,5 +35,8 @@
     </insert>
     <delete id="removePermissionFromRole">
         DELETE FROM role_permissions WHERE role_id = #{roleId} AND permission_id = #{permissionId}
+    </delete>
+    <delete id="removeAllPermissionsFromRole">
+        DELETE FROM role_permissions WHERE role_id = #{roleId}
     </delete>
 </mapper>

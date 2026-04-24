@@ -52,4 +52,7 @@
     <delete id="removeRoleFromUser">
         DELETE FROM user_roles WHERE user_id = #{userId} AND role_id = #{roleId}
     </delete>
+    <delete id="removeAllRolesFromUser">
+        DELETE FROM user_roles WHERE user_id = #{userId}
+    </delete>
 </mapper>

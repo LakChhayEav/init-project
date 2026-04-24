@@ -1,7 +1,9 @@
 package com.example.taskapp.service;
 
+import com.example.taskapp.mapper.RoleMapper;
 import com.example.taskapp.mapper.UserMapper;
 import com.example.taskapp.model.PageResponse;
+import com.example.taskapp.model.Role;
 import com.example.taskapp.model.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,10 +13,12 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserMapper userMapper;
+    private final RoleMapper roleMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public UserService(UserMapper userMapper, RoleMapper roleMapper, PasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
+        this.roleMapper = roleMapper;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -33,16 +37,37 @@ public class UserService {
         return userMapper.findById(id);
     }
 
+    @Transactional
     public void createUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userMapper.insert(user);
+        
+        if (user.getRoles() != null) {
+            for (Role role : user.getRoles()) {
+                Role existingRole = roleMapper.findByName(role.getName());
+                if (existingRole != null) {
+                    userMapper.addRoleToUser(user.getId(), existingRole.getId());
+                }
+            }
+        }
     }
 
+    @Transactional
     public void updateUser(User user) {
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         userMapper.update(user);
+        
+        userMapper.removeAllRolesFromUser(user.getId());
+        if (user.getRoles() != null) {
+            for (Role role : user.getRoles()) {
+                Role existingRole = roleMapper.findByName(role.getName());
+                if (existingRole != null) {
+                    userMapper.addRoleToUser(user.getId(), existingRole.getId());
+                }
+            }
+        }
     }
 
     public void deleteUser(Integer id) {
