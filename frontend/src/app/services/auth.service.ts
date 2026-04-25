@@ -13,13 +13,10 @@ interface LoginResponse {
   token: string;
   username: string;
   roles?: string[];
+  passwordResetRequired: boolean;
 }
 
-interface RegisterRequest {
-  username: string;
-  email: string;
-  password: string;
-}
+
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +30,7 @@ export class AuthService {
   readonly token = signal<string | null>(null);
   readonly usernameSignal = signal<string | null>(null);
   readonly rolesSignal = signal<string[]>([]);
+  readonly passwordResetRequired = signal<boolean>(false);
 
   readonly isLoggedIn = computed(() => !!this.token());
 
@@ -41,6 +39,7 @@ export class AuthService {
       // Sync with session storage on init
       this.token.set(sessionStorage.getItem('token'));
       this.usernameSignal.set(sessionStorage.getItem('username'));
+      this.passwordResetRequired.set(sessionStorage.getItem('resetRequired') === 'true');
 
       const rolesRaw = sessionStorage.getItem('roles');
       if (rolesRaw) {
@@ -68,19 +67,30 @@ export class AuthService {
             sessionStorage.setItem('token', response.token);
             sessionStorage.setItem('username', response.username);
             sessionStorage.setItem('roles', JSON.stringify(roles));
+            sessionStorage.setItem('resetRequired', String(response.passwordResetRequired));
           }
 
           this.token.set(response.token);
           this.usernameSignal.set(response.username);
           this.rolesSignal.set(roles);
+          this.passwordResetRequired.set(response.passwordResetRequired);
         }
       }),
     );
   }
 
-  register(userData: RegisterRequest): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/register`, userData);
+  changePassword(newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/change-password`, { newPassword }).pipe(
+      tap(() => {
+        this.passwordResetRequired.set(false);
+        if (this.isBrowser) {
+          sessionStorage.setItem('resetRequired', 'false');
+        }
+      })
+    );
   }
+
+
 
   logout(): void {
     if (this.isBrowser) {

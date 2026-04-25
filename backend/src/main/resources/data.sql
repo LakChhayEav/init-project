@@ -55,8 +55,8 @@ AND p.name IN ('MAIN_VIEW', 'TASKS_VIEW', 'USERS_VIEW');
 
 -- 6. Insert Main User: layalika@gmail.com
 -- Password is 'password' (BCrypt hashed)
-INSERT INTO users (username, email, password, enabled, created_by) VALUES
-('layalika', 'layalika@gmail.com', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.TVuHOn2', true, 'layalika@gmail.com');
+INSERT INTO users (username, email, password, enabled, created_by, password_reset_required) VALUES
+('layalika', 'layalika@gmail.com', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.TVuHOn2', true, 'layalika@gmail.com', false);
 
 -- 7. Assign ADMIN role to layalika
 INSERT INTO user_roles (user_id, role_id, created_by)

@@ -8,7 +8,7 @@ import { TranslatePipe } from '../../translate.pipe';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
+  imports: [ReactiveFormsModule, TranslatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -27,9 +27,16 @@ export class LoginComponent {
 
   login(): void {
     const { username, password } = this.loginForm.getRawValue();
-
     this.authService.login({ username, password }).subscribe({
-      next: () => this.router.navigate(['/main']),
+      next: (response) => {
+        console.log('Login successful, response:', response);
+        if (response.passwordResetRequired) {
+          console.log('Forcing password change to /change-password...');
+          this.router.navigateByUrl('/change-password').catch(err => console.error('Navigation error:', err));
+        } else {
+          this.router.navigate(['/main']).catch(err => console.error('Navigation error:', err));
+        }
+      },
       error: () => this.error.set('Invalid username or password'),
     });
   }

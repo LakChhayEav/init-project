@@ -22,10 +22,7 @@
 
         <div class="space-y-1">
           <div class="flex justify-between items-center">
-            <label for="password" class="label-pro text-slate-600">{{
-              'user.password' | translate
-              }}</label>
-            <a href="#" class="text-xs font-bold text-primary-600 hover:text-primary-700 transition-colors">Forgot?</a>
+            <label for="password" class="label-pro text-slate-600">{{'user.password' | translate}}</label>
           </div>
           <input id="password" formControlName="password" type="password" class="input-pro"
             [placeholder]="'user.password' | translate" />
@@ -42,15 +39,6 @@
           {{ error() }}
         </div>
         }
-
-        <div class="pt-6 border-t border-slate-100 text-center">
-          <p class="text-xs font-medium text-slate-500">
-            Don't have an account?
-            <a routerLink="/signup"
-              class="text-primary-600 hover:text-primary-700 font-bold ml-1 transition-colors underline-offset-4 hover:underline">Register
-              now</a>
-          </p>
-        </div>
       </form>
     </div>
   </div>

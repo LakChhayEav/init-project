@@ -13,6 +13,7 @@ public class User {
     private LocalDateTime createdDate;
     private String updatedBy;
     private LocalDateTime updatedDate;
+    private boolean passwordResetRequired = true;
     private List<Role> roles;
 
     public User() {}
@@ -53,6 +54,9 @@ public class User {
 
     public LocalDateTime getUpdatedDate() { return updatedDate; }
     public void setUpdatedDate(LocalDateTime updatedDate) { this.updatedDate = updatedDate; }
+
+    public boolean isPasswordResetRequired() { return passwordResetRequired; }
+    public void setPasswordResetRequired(boolean passwordResetRequired) { this.passwordResetRequired = passwordResetRequired; }
 
     public List<Role> getRoles() { return roles; }
     public void setRoles(List<Role> roles) { this.roles = roles; }

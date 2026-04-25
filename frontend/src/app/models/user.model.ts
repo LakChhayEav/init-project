@@ -25,4 +25,5 @@ export interface User extends AuditFields {
   password?: string;
   enabled: boolean;
   roles?: Role[];
+  passwordResetRequired?: boolean;
 }

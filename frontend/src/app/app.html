@@ -1,65 +1,72 @@
 @if (authService.isLoggedIn()) {
-<div class="flex h-screen w-full bg-slate-50">
-  <!-- Sidebar -->
-  <app-sidebar />
+  @if (authService.passwordResetRequired()) {
+    <app-change-password />
+  } @else {
+    <div class="flex h-screen w-full bg-slate-50">
+      <!-- Sidebar -->
+      <app-sidebar />
 
-  <!-- Main Content Area -->
-  <div class="flex-1 flex flex-col transition-all duration-300 ease-in-out" [class.ml-72]="navService.isSidebarOpen()"
-    [class.ml-20]="!navService.isSidebarOpen()">
-    <!-- Header -->
-    <app-header />
+      <!-- Main Content Area -->
+      <div class="flex-1 flex flex-col transition-all duration-300 ease-in-out" [class.ml-72]="navService.isSidebarOpen()"
+        [class.ml-20]="!navService.isSidebarOpen()">
+        <!-- Header -->
+        <app-header />
 
-    <!-- Main View Content -->
-    <main class="flex-1 flex flex-col p-4 bg-slate-50 overflow-y-auto h-full">
-      <!-- Reactive Tab Header -->
-      @if (navService.tabs().length > 0) {
-      <div class="flex items-center gap-0.5 scrollbar-hide border-b border-slate-200 mb-0.5 px-2">
-        @for (tab of navService.tabs(); track tab.id) {
-        <button type="button"
-          class="flex items-center gap-2 px-3 py-1 transition-all whitespace-nowrap relative group border-t-2" [class]="
-                  tab.id === navService.activeTabId()
-                    ? 'bg-white border-t-primary-600 border-x border-slate-200 -mb-[1px] rounded-t-xl text-primary-700 shadow-sm z-10'
-                    : 'bg-transparent border-t-transparent border-x border-x-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100/50 rounded-t-lg'
-                " (click)="navService.activateTab(tab.id)">
-          <span class="text-sm font-bold">{{ tab.title }}</span>
-          <span class="hover:bg-slate-100 rounded-md p-0.5 transition-colors text-slate-400 hover:text-red-500"
-            (click)="navService.closeTab(tab.id, $event)">
-            <i class="bi bi-x"></i>
-          </span>
-        </button>
-        }
+        <!-- Main View Content -->
+        <main class="flex-1 flex flex-col p-4 bg-slate-50 overflow-y-auto h-full">
+          <!-- Reactive Tab Header -->
+          @if (navService.tabs().length > 0) {
+          <div class="flex items-center gap-0.5 scrollbar-hide border-b border-slate-200 mb-0.5 px-2">
+            @for (tab of navService.tabs(); track tab.id) {
+            <button type="button"
+              class="flex items-center gap-2 px-3 py-1 transition-all whitespace-nowrap relative group border-t-2" [class]="
+                      tab.id === navService.activeTabId()
+                        ? 'bg-white border-t-primary-600 border-x border-slate-200 -mb-[1px] rounded-t-xl text-primary-700 shadow-sm z-10'
+                        : 'bg-transparent border-t-transparent border-x border-x-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100/50 rounded-t-lg'
+                    " (click)="navService.activateTab(tab.id)">
+              <span class="text-sm font-bold">{{ tab.title }}</span>
+              <span class="hover:bg-slate-100 rounded-md p-0.5 transition-colors text-slate-400 hover:text-red-500"
+                (click)="navService.closeTab(tab.id, $event)">
+                <i class="bi bi-x"></i>
+              </span>
+            </button>
+            }
+          </div>
+          }
+
+          <!-- Tab Content Area -->
+          <div class="flex-1 bg-white rounded-xl border border-slate-200 shadow-xl shadow-slate-200/40">
+            @for (tab of navService.tabs(); track tab.id) {
+            <div [class.hidden]="tab.id !== navService.activeTabId()" class="p-6">
+              @switch (tab.type) {
+              @case ('main') {
+              <app-main-page />
+              }
+              @case ('tasks') {
+              <app-task-list />
+              }
+              @case ('users') {
+              <app-user-list />
+              }
+              @case ('permissions') {
+              <app-role-permission />
+              }
+              @case ('change-password') {
+              <app-change-password />
+              }
+              }
+            </div>
+            }
+          </div>
+        </main>
+
+        <!-- Footer -->
+        <app-footer />
       </div>
-      }
 
-      <!-- Tab Content Area -->
-      <div class="flex-1 bg-white rounded-xl border border-slate-200 shadow-xl shadow-slate-200/40">
-        @for (tab of navService.tabs(); track tab.id) {
-        <div [class.hidden]="tab.id !== navService.activeTabId()" class="p-6">
-          @switch (tab.type) {
-          @case ('main') {
-          <app-main-page />
-          }
-          @case ('tasks') {
-          <app-task-list />
-          }
-          @case ('users') {
-          <app-user-list />
-          }
-          @case ('permissions') {
-          <app-role-permission />
-          }
-          }
-        </div>
-        }
-      </div>
-    </main>
-
-    <!-- Footer -->
-    <app-footer />
-  </div>
-
-  <app-confirm-dialog />
-</div>
+      <app-confirm-dialog />
+    </div>
+  }
 } @else {
 <main class="min-h-screen">
   <router-outlet />

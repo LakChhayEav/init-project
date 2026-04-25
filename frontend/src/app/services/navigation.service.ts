@@ -4,7 +4,7 @@ import { LanguageService } from './language.service';
 import { PermissionService } from './permission.service';
 import { AuthService } from './auth.service';
 
-export type MenuTabType = 'main' | 'tasks' | 'users' | 'permissions';
+export type MenuTabType = 'main' | 'tasks' | 'users' | 'permissions' | 'change-password';
 
 export interface AppTab {
   id: string;

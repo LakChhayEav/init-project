@@ -11,6 +11,7 @@
         <result property="createdDate" column="created_date"/>
         <result property="updatedBy" column="updated_by"/>
         <result property="updatedDate" column="updated_date"/>
+        <result property="passwordResetRequired" column="password_reset_required"/>
         <collection property="roles" column="id" select="com.example.taskapp.mapper.RoleMapper.findByUserId"/>
     </resultMap>
 
@@ -37,11 +38,14 @@
         SELECT * FROM users WHERE id = #{id}
     </select>
     <select id="findByUsername" resultMap="UserMap">
-        SELECT * FROM users WHERE username = #{username}
+        SELECT * FROM users WHERE username = #{username} OR email = #{username}
     </select>
+    <update id="updatePassword">
+        UPDATE users SET password = #{password}, password_reset_required = false WHERE id = #{userId}
+    </update>
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO users (username, email, password, enabled, created_by, created_date, updated_by, updated_date)
-        VALUES (#{username}, #{email}, #{password}, #{enabled}, #{createdBy}, #{createdDate}, #{updatedBy}, #{updatedDate})
+        INSERT INTO users (username, email, password, enabled, created_by, created_date, updated_by, updated_date, password_reset_required)
+        VALUES (#{username}, #{email}, #{password}, #{enabled}, #{createdBy}, #{createdDate}, #{updatedBy}, #{updatedDate}, #{passwordResetRequired})
     </insert>
     <update id="update">
         UPDATE users 
@@ -49,7 +53,8 @@
             email = #{email}, 
             enabled = #{enabled},
             updated_by = #{updatedBy},
-            updated_date = #{updatedDate}
+            updated_date = #{updatedDate},
+            password_reset_required = #{passwordResetRequired}
         WHERE id = #{id}
     </update>
     <delete id="delete">

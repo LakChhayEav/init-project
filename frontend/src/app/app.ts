@@ -16,6 +16,7 @@ import { TaskListComponent } from './components/task-list/task-list.component';
 import { UserListComponent } from './components/user-list/user-list.component';
 import { RolePermissionComponent } from './components/role-permission/role-permission.component';
 import { ConfirmDialogComponent } from './components/shared/confirm-dialog/confirm-dialog.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +31,7 @@ import { ConfirmDialogComponent } from './components/shared/confirm-dialog/confi
     UserListComponent,
     RolePermissionComponent,
     ConfirmDialogComponent,
+    ChangePasswordComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',

@@ -60,6 +60,7 @@ export class UserListComponent {
     password: [''],
     enabled: [true],
     roles: [['USER']],
+    passwordResetRequired: [true],
   });
 
   readonly columns: TableColumn[] = [
@@ -139,7 +140,7 @@ export class UserListComponent {
     this.isEditMode.set(false);
     this.activeUserId.set(null);
     this.clearMessages();
-    this.userForm.reset({ username: '', email: '', password: '', enabled: true, roles: ['USER'] });
+    this.userForm.reset({ username: '', email: '', password: '', enabled: true, roles: ['USER'], passwordResetRequired: true });
     this.isPopupOpen.set(true);
   }
 
@@ -155,6 +156,7 @@ export class UserListComponent {
       password: '',
       enabled: user.enabled,
       roles: user.roles?.map(r => r.name) ?? ['USER'],
+      passwordResetRequired: user.passwordResetRequired ?? false,
     });
     this.isPopupOpen.set(true);
   }
@@ -168,12 +170,13 @@ export class UserListComponent {
     if (editing && !this.permissionService.canUpdate('users')) return;
     if (!editing && !this.permissionService.canCreate('users')) return;
 
-    const { username, email, password, enabled, roles } = this.userForm.getRawValue();
+    const { username, email, password, enabled, roles, passwordResetRequired } = this.userForm.getRawValue();
     const trimmed = {
       username: username.trim(),
       email: email.trim(),
       password: password.trim(),
       roles: roles && roles.length > 0 ? roles : ['USER'],
+      passwordResetRequired: !!passwordResetRequired
     };
 
     if (!trimmed.username || !trimmed.email) {
@@ -191,6 +194,7 @@ export class UserListComponent {
       email: trimmed.email,
       enabled: !!enabled,
       roles: trimmed.roles.map(r => ({ name: r })),
+      passwordResetRequired: trimmed.passwordResetRequired,
       ...(trimmed.password ? { password: trimmed.password } : {}),
     };
 

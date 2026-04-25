@@ -36,7 +36,8 @@ CREATE TABLE IF NOT EXISTS users (
     created_by VARCHAR(50),
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_by VARCHAR(50),
-    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    password_reset_required BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS user_roles (

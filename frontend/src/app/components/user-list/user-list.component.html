@@ -242,7 +242,7 @@
               </select>
               <p class="text-xs text-slate-500 mt-1">Hold Ctrl (or Cmd) to select multiple.</p>
             </div>
-            <div class="flex items-center pt-7 px-2">
+            <div class="flex flex-col gap-3 pt-7 px-2">
               <label class="flex items-center gap-2 cursor-pointer group">
                 <input
                   type="checkbox"
@@ -252,6 +252,18 @@
                 <span
                   class="text-sm font-semibold text-slate-700 group-hover:text-primary-600 transition-colors"
                   >{{ 'user.enabled' | translate }}</span
+                >
+              </label>
+
+              <label class="flex items-center gap-2 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  formControlName="passwordResetRequired"
+                  class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 border-slate-300"
+                />
+                <span
+                  class="text-sm font-semibold text-slate-700 group-hover:text-amber-600 transition-colors"
+                  >{{ 'user.force_reset' | translate }}</span
                 >
               </label>
             </div>

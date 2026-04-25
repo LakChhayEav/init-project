@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment';
 import { Permission } from '../models/user.model';
 
-export type AppFeature = 'main' | 'tasks' | 'users' | 'permissions';
+export type AppFeature = 'main' | 'tasks' | 'users' | 'permissions' | 'change-password';
 export type AppCapability = 'view' | 'create' | 'update' | 'delete';
 
 export interface RolePolicy {
@@ -33,6 +33,7 @@ export class PermissionService {
         tasks: ['view', 'create', 'update', 'delete'],
         users: ['view', 'create', 'update', 'delete'],
         permissions: ['view', 'create', 'update', 'delete'],
+        'change-password': ['view'],
       },
     },
     {
@@ -42,6 +43,7 @@ export class PermissionService {
         tasks: ['view', 'create', 'update'],
         users: ['view', 'create', 'update'],
         permissions: ['view'],
+        'change-password': ['view'],
       },
     },
     {
@@ -50,6 +52,7 @@ export class PermissionService {
         main: ['view'],
         tasks: ['view'],
         users: ['view'],
+        'change-password': ['view'],
       },
     },
     {
@@ -58,6 +61,7 @@ export class PermissionService {
         main: ['view'],
         tasks: ['view'],
         users: ['view'],
+        'change-password': ['view'],
       },
     },
   ]);
