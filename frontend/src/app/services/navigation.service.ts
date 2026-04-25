@@ -86,6 +86,36 @@ export class NavigationService {
     }
   }
 
+  closeOtherTabs(tabId: string): void {
+    const currentTabs = this.tabs();
+    const target = currentTabs.find((t) => t.id === tabId);
+    if (!target) return;
+
+    this.tabs.set([target]);
+    this.activeTabId.set(tabId);
+    this.router.navigate([`/${target.type}`]);
+  }
+
+  closeAllTabs(): void {
+    this.tabs.set([]);
+    this.activeTabId.set(null);
+    this.openMenuTab('main');
+  }
+
+  closeTabsToRight(tabId: string): void {
+    const currentTabs = this.tabs();
+    const index = currentTabs.findIndex((t) => t.id === tabId);
+    if (index === -1) return;
+
+    const remaining = currentTabs.slice(0, index + 1);
+    this.tabs.set(remaining);
+    
+    if (!remaining.some(t => t.id === this.activeTabId())) {
+      this.activeTabId.set(tabId);
+      this.router.navigate([`/${remaining[index].type}`]);
+    }
+  }
+
   isTabTypeActive(type: MenuTabType): boolean {
     return this.activeTab()?.type === type;
   }

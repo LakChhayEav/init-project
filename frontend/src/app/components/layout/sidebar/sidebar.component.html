@@ -1,97 +1,111 @@
-<aside class="bg-primary-900 text-white flex flex-col shadow-xl fixed h-full z-30 transition-all duration-300 ease-in-out"
+<aside class="bg-slate-900 text-white flex flex-col shadow-2xl fixed h-full z-30 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden"
        [class.w-72]="navService.isSidebarOpen()"
        [class.w-20]="!navService.isSidebarOpen()">
-  <div class="p-6 flex items-center justify-between">
+  
+  <!-- Modern Gradient Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-b from-indigo-500/10 via-transparent to-slate-950/50 pointer-events-none"></div>
+
+  <!-- Header Section -->
+  <div class="p-6 flex items-center justify-between relative z-10">
     <button type="button"
-      class="flex items-center gap-2 text-xl font-bold text-white hover:text-primary-100 transition-colors overflow-hidden whitespace-nowrap"
+      class="flex items-center gap-3 text-lg font-black text-white hover:text-indigo-300 transition-all duration-300 overflow-hidden whitespace-nowrap group"
       (click)="navService.openMenuTab('main')"
-      [class.w-0]="!navService.isSidebarOpen()"
-      [class.opacity-0]="!navService.isSidebarOpen()">
-      <i class="bi bi-shield-check text-yellow-400"></i>
+      [class.opacity-0]="!navService.isSidebarOpen()"
+      [class.pointer-events-none]="!navService.isSidebarOpen()">
+      <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/40 group-hover:scale-110 transition-transform">
+        <i class="bi bi-shield-lock-fill text-white"></i>
+      </div>
       @if (navService.isSidebarOpen()) {
-        <span>{{ 'app.title' | translate }}</span>
+        <span class=" uppercase text-base font-black">{{ 'app.title' | translate }}</span>
       }
     </button>
-    <button type="button" class="text-primary-200 hover:text-white transition-colors flex-shrink-0" (click)="navService.toggleSidebar()">
-      <i class="bi bi-list text-2xl"></i>
+    <button type="button" 
+      class="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800/50 hover:bg-slate-700 text-slate-300 hover:text-white transition-all duration-300 border border-slate-700/50 flex-shrink-0" 
+      (click)="navService.toggleSidebar()">
+      <i class="bi" [class.bi-text-indent-left]="navService.isSidebarOpen()" [class.bi-text-indent-right]="!navService.isSidebarOpen()"></i>
     </button>
   </div>
 
-  <nav class="flex-1 px-4 space-y-2 overflow-y-auto overflow-x-hidden scrollbar-hide">
+  <!-- Navigation Section -->
+  <nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto overflow-x-hidden scrollbar-hide relative z-10">
+    
+    <!-- Dashboard Link -->
     @if (permissionService.canView('main')) {
-    <button type="button" class="flex items-center gap-3 py-2.5 rounded-lg transition-all overflow-hidden whitespace-nowrap"
-      [class.px-4]="navService.isSidebarOpen()"
-      [class.px-0]="!navService.isSidebarOpen()"
+    <button type="button" 
+      class="nav-item-creative group"
+      [class.active]="navService.isTabTypeActive('main')"
       [class.justify-center]="!navService.isSidebarOpen()"
-      [class.w-full]="navService.isSidebarOpen()"
-      [class]="navService.isTabTypeActive('main') ? 'bg-primary-700 text-white shadow-md' : 'text-primary-100 hover:bg-primary-800'"
       (click)="navService.openMenuTab('main')"
       [title]="!navService.isSidebarOpen() ? ('nav.main' | translate) : ''">
-      <i class="bi bi-grid-1x2 text-lg flex-shrink-0"></i> 
+      <i class="bi bi-grid-1x2-fill text-xl"></i> 
       @if (navService.isSidebarOpen()) {
-        <span>{{ 'nav.main' | translate }}</span>
+        <span class="font-black  text-base">{{ 'nav.main' | translate }}</span>
+      }
+      @if (navService.isTabTypeActive('main') && navService.isSidebarOpen()) {
+        <div class="ml-auto w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></div>
       }
     </button>
     }
 
+    <!-- Tasks Link -->
     @if (permissionService.canView('tasks')) {
-    <button type="button" class="flex items-center gap-3 py-2.5 rounded-lg transition-all overflow-hidden whitespace-nowrap"
-      [class.px-4]="navService.isSidebarOpen()"
-      [class.px-0]="!navService.isSidebarOpen()"
+    <button type="button" 
+      class="nav-item-creative group"
+      [class.active]="navService.isTabTypeActive('tasks')"
       [class.justify-center]="!navService.isSidebarOpen()"
-      [class.w-full]="navService.isSidebarOpen()"
-      [class]="navService.isTabTypeActive('tasks') ? 'bg-primary-700 text-white shadow-md' : 'text-primary-100 hover:bg-primary-800'"
       (click)="navService.openMenuTab('tasks')"
       [title]="!navService.isSidebarOpen() ? ('nav.tasks' | translate) : ''">
-      <i class="bi bi-list-check text-lg flex-shrink-0"></i>
+      <i class="bi bi-collection-fill text-xl"></i>
       @if (navService.isSidebarOpen()) {
-        <span>{{ 'nav.tasks' | translate }}</span>
+        <span class="font-black  text-base">{{ 'nav.tasks' | translate }}</span>
+      }
+      @if (navService.isTabTypeActive('tasks') && navService.isSidebarOpen()) {
+        <div class="ml-auto w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></div>
       }
     </button>
     }
 
-    @if (permissionService.canView('users') || permissionService.canView('permissions')) {
+    <!-- Security Section -->
+    @if (permissionService.canView('users') || permissionService.canView('permissions') || permissionService.canView('change-password')) {
     <div class="space-y-1">
-      <button type="button" class="flex items-center justify-between py-2.5 rounded-lg transition-all text-primary-100 hover:bg-primary-800 overflow-hidden whitespace-nowrap"
-        [class.px-4]="navService.isSidebarOpen()"
-        [class.px-0]="!navService.isSidebarOpen()"
+      <button type="button" 
+        class="nav-item-creative w-full group"
+        [class.active-parent]="isSecurityMenuOpen() && navService.isSidebarOpen()"
         [class.justify-center]="!navService.isSidebarOpen()"
-        [class.w-full]="navService.isSidebarOpen()"
         (click)="toggleSecurityMenu()"
         [title]="!navService.isSidebarOpen() ? ('nav.security' | translate) : ''">
-        <div class="flex items-center gap-3">
-          <i class="bi bi-shield-check text-lg flex-shrink-0"></i>
-          @if (navService.isSidebarOpen()) {
-            <span>{{ 'nav.security' | translate }}</span>
-          }
-        </div>
+        <i class="bi bi-shield-fill-check text-xl"></i>
         @if (navService.isSidebarOpen()) {
-          <i class="bi text-sm transition-transform flex-shrink-0" [class.bi-chevron-down]="isSecurityMenuOpen()" [class.bi-chevron-right]="!isSecurityMenuOpen()"></i>
+          <span class="font-black  text-base">{{ 'nav.security' | translate }}</span>
+          <i class="bi text-[10px] ml-auto transition-transform duration-300" [class.bi-chevron-down]="isSecurityMenuOpen()" [class.bi-chevron-right]="!isSecurityMenuOpen()"></i>
         }
       </button>
 
       @if (isSecurityMenuOpen() && navService.isSidebarOpen()) {
-      <div class="pl-11 pr-2 space-y-1">
+      <div class="ml-6 pl-4 border-l-2 border-slate-800 space-y-1 animate-in slide-in-from-left-2 duration-300">
         @if (permissionService.canView('users')) {
-        <button type="button" class="w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-all text-sm whitespace-nowrap"
-          [class]="navService.isTabTypeActive('users') ? 'bg-primary-700 text-white shadow-md' : 'text-primary-200 hover:bg-primary-800 hover:text-white'"
+        <button type="button" 
+          class="subnav-item-creative group"
+          [class.active]="navService.isTabTypeActive('users')"
           (click)="navService.openMenuTab('users')">
-          <i class="bi bi-people flex-shrink-0"></i> <span>{{ 'nav.users' | translate }}</span>
+          <i class="bi bi-people-fill"></i> <span class="text-sm font-black">{{ 'nav.users' | translate }}</span>
         </button>
         }
 
         @if (permissionService.canView('permissions')) {
-        <button type="button" class="w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-all text-sm whitespace-nowrap"
-          [class]="navService.isTabTypeActive('permissions') ? 'bg-primary-700 text-white shadow-md': 'text-primary-200 hover:bg-primary-800 hover:text-white'"
+        <button type="button" 
+          class="subnav-item-creative group"
+          [class.active]="navService.isTabTypeActive('permissions')"
           (click)="navService.openMenuTab('permissions')">
-          <i class="bi bi-shield-lock flex-shrink-0"></i> <span>{{ 'nav.permissions' | translate }}</span>
+          <i class="bi bi-key-fill"></i> <span class="text-sm font-black">{{ 'nav.permissions' | translate }}</span>
         </button>
         }
 
-        <button type="button" class="w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-all text-sm whitespace-nowrap"
-          [class]="navService.isTabTypeActive('change-password') ? 'bg-primary-700 text-white shadow-md': 'text-primary-200 hover:bg-primary-800 hover:text-white'"
+        <button type="button" 
+          class="subnav-item-creative group"
+          [class.active]="navService.isTabTypeActive('change-password')"
           (click)="navService.openMenuTab('change-password')">
-          <i class="bi bi-key flex-shrink-0"></i> <span>{{ 'nav.change-password' | translate }}</span>
+          <i class="bi bi-lock-fill"></i> <span class="text-sm font-black">{{ 'nav.change-password' | translate }}</span>
         </button>
       </div>
       }
@@ -99,15 +113,17 @@
     }
   </nav>
 
-  <div class="p-4 border-t border-primary-800">
-    <button (click)="logout()"
-      class="flex items-center justify-center gap-2 py-2 bg-primary-800 hover:bg-red-600 rounded-lg transition-colors text-sm font-semibold overflow-hidden whitespace-nowrap w-full"
-      [class.px-4]="navService.isSidebarOpen()"
-      [title]="!navService.isSidebarOpen() ? ('auth.logout' | translate) : ''">
-      <i class="bi bi-box-arrow-right text-lg flex-shrink-0"></i> 
-      @if (navService.isSidebarOpen()) {
-        <span>{{ 'auth.logout' | translate }}</span>
-      }
-    </button>
+  <!-- Logout Section -->
+  <div class="p-4 relative z-10">
+    <div class="bg-slate-800/50 p-2 rounded-2xl border border-slate-700/30">
+      <button (click)="logout()"
+        class="flex items-center justify-center gap-3 py-2 w-full bg-slate-900 hover:bg-red-600/90 rounded-xl transition-all duration-300 text-[10px] font-black  uppercase group"
+        [title]="!navService.isSidebarOpen() ? ('auth.logout' | translate) : ''">
+        <i class="bi bi-power text-lg group-hover:scale-110 transition-transform"></i> 
+        @if (navService.isSidebarOpen()) {
+          <span>{{ 'auth.logout' | translate }}</span>
+        }
+      </button>
+    </div>
   </div>
 </aside>

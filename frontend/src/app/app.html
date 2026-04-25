@@ -13,31 +13,58 @@
         <app-header />
 
         <!-- Main View Content -->
-        <main class="flex-1 flex flex-col p-4 bg-slate-50 overflow-y-auto h-full">
-          <!-- Reactive Tab Header -->
+        <main class="flex-1 flex flex-col p-6 bg-slate-50 overflow-y-auto h-full scrollbar-hide">
+          <!-- Creative Tab Header -->
           @if (navService.tabs().length > 0) {
-          <div class="flex items-center gap-0.5 scrollbar-hide border-b border-slate-200 mb-0.5 px-2">
+          <div class="flex items-center gap-2 mb-6 px-1 relative h-12">
             @for (tab of navService.tabs(); track tab.id) {
             <button type="button"
-              class="flex items-center gap-2 px-3 py-1 transition-all whitespace-nowrap relative group border-t-2" [class]="
+              (contextmenu)="openContextMenu($event, tab.id)"
+              class="flex items-center gap-2 px-4 h-9 transition-all duration-300 whitespace-nowrap relative rounded-xl font-bold text-sm  border group" [class]="
                       tab.id === navService.activeTabId()
-                        ? 'bg-white border-t-primary-600 border-x border-slate-200 -mb-[1px] rounded-t-xl text-primary-700 shadow-sm z-10'
-                        : 'bg-transparent border-t-transparent border-x border-x-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-100/50 rounded-t-lg'
+                        ? 'bg-white border-white text-indigo-700 shadow-xl shadow-indigo-100/50 scale-105 z-10'
+                        : 'bg-slate-200/50 border-transparent text-slate-500 hover:bg-slate-200 hover:text-slate-700'
                     " (click)="navService.activateTab(tab.id)">
-              <span class="text-sm font-bold">{{ tab.title }}</span>
-              <span class="hover:bg-slate-100 rounded-md p-0.5 transition-colors text-slate-400 hover:text-red-500"
+              <div class="w-2 h-2 rounded-full transition-all duration-300" 
+                [class]="tab.id === navService.activeTabId() ? 'bg-indigo-500 scale-125' : 'bg-slate-400 group-hover:bg-slate-500'"></div>
+              <span>{{ tab.title }}</span>
+              <span class="ml-1 opacity-0 group-hover:opacity-100 hover:bg-slate-100 rounded-lg p-1 transition-all text-slate-400 hover:text-red-500"
                 (click)="navService.closeTab(tab.id, $event)">
-                <i class="bi bi-x"></i>
+                <i class="bi bi-x-lg text-[10px]"></i>
               </span>
             </button>
+            }
+
+            <!-- Context Menu (Already implemented, just ensuring it looks right) -->
+            @if (contextMenu(); as menu) {
+            <div class="fixed z-[100] bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white p-2 w-64 animate-in fade-in zoom-in-95 duration-300"
+              [style.left.px]="menu.x" [style.top.px]="menu.y">
+              <button class="w-full text-left px-4 py-3 text-sm font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition-all flex items-center gap-4 group"
+                (click)="navService.closeTab(menu.tabId)">
+                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-indigo-100"><i class="bi bi-x-lg"></i></div> {{ 'common.close' | translate }}
+              </button>
+              <button class="w-full text-left px-4 py-3 text-sm font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition-all flex items-center gap-4 group"
+                (click)="navService.closeOtherTabs(menu.tabId)">
+                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-indigo-100"><i class="bi bi-intersect"></i></div> {{ 'common.close_others' | translate }}
+              </button>
+              <button class="w-full text-left px-4 py-3 text-sm font-bold text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition-all flex items-center gap-4 group"
+                (click)="navService.closeTabsToRight(menu.tabId)">
+                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-indigo-100"><i class="bi bi-arrow-right"></i></div> {{ 'common.close_right' | translate }}
+              </button>
+              <div class="h-px bg-slate-100 my-2 mx-2"></div>
+              <button class="w-full text-left px-4 py-3 text-sm font-bold text-red-600 hover:bg-red-50 rounded-xl transition-all flex items-center gap-4 group"
+                (click)="navService.closeAllTabs()">
+                <div class="w-8 h-8 rounded-lg bg-red-100/50 flex items-center justify-center group-hover:bg-red-100"><i class="bi bi-trash-fill"></i></div> {{ 'common.close_all' | translate }}
+              </button>
+            </div>
             }
           </div>
           }
 
           <!-- Tab Content Area -->
-          <div class="flex-1 bg-white rounded-xl border border-slate-200 shadow-xl shadow-slate-200/40">
+          <div class="flex-1 bg-white rounded-3xl border border-slate-200 shadow-2xl shadow-slate-200/50 overflow-hidden relative">
             @for (tab of navService.tabs(); track tab.id) {
-            <div [class.hidden]="tab.id !== navService.activeTabId()" class="p-6">
+            <div [class.hidden]="tab.id !== navService.activeTabId()" class="p-8 h-full overflow-y-auto custom-scrollbar animate-in fade-in slide-in-from-bottom-4 duration-500">
               @switch (tab.type) {
               @case ('main') {
               <app-main-page />

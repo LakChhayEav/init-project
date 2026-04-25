@@ -1,284 +1,248 @@
-<div class="space-y-4">
-  <!-- Header -->
+<div class="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-700">
+  <!-- Creative Header -->
   <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-    <div>
-      <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
-        <i class="bi bi-people text-primary-600"></i>
+    <div class="space-y-1">
+      <div
+        class="inline-flex items-center gap-2 px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase  border border-indigo-100">
+        <i class="bi bi-people-fill"></i> Directory
+      </div>
+      <h2 class="text-2xl font-black text-slate-900 ">
         {{ 'user.list.title' | translate }}
       </h2>
-      <p class="text-slate-500 text-sm mt-1">{{ 'user.list.subtitle' | translate }}</p>
+      <p class="text-slate-500 text-xs font-medium">{{ 'user.list.subtitle' | translate }}</p>
     </div>
 
     @if (permissionService.canCreate('users')) {
-      <button class="btn-primary group md:w-auto" type="button" (click)="openCreatePopup()">
-        <i class="bi bi-person-plus text-lg mr-2 group-hover:scale-110 transition-transform"></i>
-        {{ 'user.add' | translate }}
-      </button>
+    <button
+      class="relative group px-6 py-3 bg-slate-900 text-white font-black rounded-xl hover:bg-indigo-600 transition-all shadow-lg shadow-slate-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2 overflow-hidden"
+      type="button" (click)="openCreatePopup()">
+      <i class="bi bi-person-plus-fill text-base group-hover:scale-110 transition-transform"></i>
+      <span class="uppercase font-black text-sm">{{ 'user.add' | translate }}</span>
+    </button>
     }
   </div>
 
-  <!-- Filters -->
-  <div class="card-pro p-4 bg-slate-50/50">
+  <!-- Polished Filters -->
+  <div class="p-6 bg-slate-50/50 rounded-3xl border border-slate-100/80 backdrop-blur-sm">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4" [formGroup]="filterForm">
-      <div class="space-y-1">
-        <label for="filterSearch" class="label-pro">{{ 'common.search' | translate }}</label>
+      <div class="space-y-1.5">
+        <label for="filterSearch" class="text-xs font-black text-slate-400 uppercase  ml-1">{{ 'common.search' |
+          translate }}</label>
         <div class="relative">
-          <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-          <input
-            id="filterSearch"
-            formControlName="search"
-            class="input-pro pl-10"
-            [placeholder]="'common.search' | translate"
-            (keyup.enter)="search()"
-          />
+          <i class="bi bi-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+          <input id="filterSearch" formControlName="search"
+            class="w-full pl-10 pr-4 py-2.5 bg-white border-transparent rounded-xl text-slate-900 font-bold focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/30 transition-all outline-none text-sm shadow-sm"
+            [placeholder]="'common.search' | translate" (keyup.enter)="search()" />
         </div>
       </div>
 
-      <div class="space-y-1">
-        <label for="filterStatus" class="label-pro">{{ 'common.status' | translate }}</label>
-        <select id="filterStatus" formControlName="status" class="input-pro" (change)="search()">
+      <div class="space-y-1.5">
+        <label for="filterStatus" class="text-xs font-black text-slate-400 uppercase  ml-1">{{ 'common.status' |
+          translate }}</label>
+        <select id="filterStatus" formControlName="status"
+          class="w-full px-4 py-2.5 bg-white border-transparent rounded-xl text-slate-900 font-bold focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/30 transition-all outline-none text-sm shadow-sm appearance-none cursor-pointer"
+          (change)="search()">
           <option value="all">{{ 'common.status' | translate }} (All)</option>
           <option value="active">{{ 'user.active' | translate }}</option>
           <option value="inactive">{{ 'user.inactive' | translate }}</option>
         </select>
       </div>
 
-      <div class="space-y-1">
-        <label for="filterRole" class="label-pro">{{ 'common.role' | translate }}</label>
-        <select id="filterRole" formControlName="role" class="input-pro" (change)="search()">
+      <div class="space-y-1.5">
+        <label for="filterRole" class="text-xs font-black text-slate-400 uppercase  ml-1">{{ 'common.role' | translate
+          }}</label>
+        <select id="filterRole" formControlName="role"
+          class="w-full px-4 py-2.5 bg-white border-transparent rounded-xl text-slate-900 font-bold focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/30 transition-all outline-none text-sm shadow-sm appearance-none cursor-pointer"
+          (change)="search()">
           <option value="all">{{ 'common.role' | translate }} (All)</option>
           @for (role of roleOptions(); track role) {
-            <option [value]="role">{{ role }}</option>
+          <option [value]="role">{{ role }}</option>
           }
         </select>
       </div>
 
       <div class="flex items-end">
-        <button type="button" class="btn-primary w-full md:w-auto" (click)="search()">
-          <i class="bi bi-search mr-2"></i> {{ 'common.search' | translate }}
+        <button type="button"
+          class="w-full py-2.5 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100 flex items-center justify-center gap-2 text-sm uppercase "
+          (click)="search()">
+          <i class="bi bi-funnel-fill"></i> {{ 'common.search' | translate }}
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Table -->
-  <app-table
-    [data]="users()"
-    [columns]="columns"
-    [totalElements]="totalElements()"
-    [currentPage]="currentPage()"
-    [pageSize]="pageSize()"
-    [pageSizeOptions]="pageSizeOptions"
-    (pageChange)="goToPage($event)"
-    (pageSizeChange)="onPageSizeChange($event)"
-  >
-    <ng-template #cellTemplate let-value let-row="row" let-col="column">
-      @if (col.key === 'username') {
-        <div class="flex items-center gap-3">
+  <!-- Premium Table Integration -->
+  <div class="rounded-3xl overflow-hidden border border-slate-100 shadow-xl shadow-slate-200/40 bg-white">
+    <app-table [data]="users()" [columns]="columns" [totalElements]="totalElements()" [currentPage]="currentPage()"
+      [pageSize]="pageSize()" [pageSizeOptions]="pageSizeOptions" (pageChange)="goToPage($event)"
+      (pageSizeChange)="onPageSizeChange($event)">
+      <ng-template #cellTemplate let-value let-row="row" let-col="column">
+        @if (col.key === 'username') {
+        <div class="flex items-center gap-4 py-1">
           <div
-            class="w-8 h-8 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-bold text-xs border border-primary-200"
-          >
+            class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-50 to-white border border-indigo-100 text-indigo-600 flex items-center justify-center font-black text-base shadow-sm">
             {{ (row.username || '?').charAt(0).toUpperCase() }}
           </div>
           <div>
-            <div class="text-sm font-bold text-slate-900">{{ row.username }}</div>
-            <div class="text-xs text-slate-500">{{ row.email }}</div>
+            <div class="text-base font-black text-slate-800">{{ row.username }}</div>
+            <div class="text-xs text-slate-400 font-bold ">{{ row.email }}</div>
           </div>
         </div>
-      } @else if (col.key === 'enabled') {
-        <div class="flex items-center gap-2">
+        } @else if (col.key === 'enabled') {
+        <div class="flex items-center gap-3">
           <button
-            class="relative inline-flex h-4 w-8 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-1 focus:ring-primary-600 focus:ring-offset-1"
-            [class]="row.enabled ? 'bg-green-500' : 'bg-slate-200'"
-            [disabled]="!permissionService.canUpdate('users')"
-            (click)="row.enabled = !row.enabled; toggleUser(row)"
-          >
+            class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-300 ease-in-out focus:outline-none focus:ring-4 focus:ring-indigo-500/10"
+            [class]="row.enabled ? 'bg-emerald-500' : 'bg-slate-200'" [disabled]="!permissionService.canUpdate('users')"
+            (click)="row.enabled = !row.enabled; toggleUser(row)">
             <span
-              class="pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
-              [class.translate-x-4]="row.enabled"
-              [class.translate-x-0]="!row.enabled"
-            ></span>
+              class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out"
+              [class.translate-x-5]="row.enabled" [class.translate-x-0]="!row.enabled"></span>
           </button>
-          <span
-            class="text-xs font-semibold"
-            [class]="row.enabled ? 'text-green-600' : 'text-slate-400'"
-          >
+          <span class="text-xs font-black uppercase " [class]="row.enabled ? 'text-emerald-600' : 'text-slate-400'">
             {{ row.enabled ? ('user.active' | translate) : ('user.inactive' | translate) }}
           </span>
         </div>
-      } @else if (col.key === 'roles') {
-        <div class="flex flex-wrap gap-1">
+        } @else if (col.key === 'roles') {
+        <div class="flex flex-wrap gap-2">
           @for (role of row.roles; track role.name) {
-            <span
-              class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-primary-50 text-primary-700 border border-primary-100 uppercase"
-            >
-              {{ role.name }}
-            </span>
+          <span
+            class="px-3 py-1 rounded-lg text-[10px] font-black bg-indigo-50 text-indigo-600 border border-indigo-100 uppercase ">
+            {{ role.name }}
+          </span>
           } @empty {
-            <span class="text-[10px] text-slate-400 italic">No roles</span>
+          <span class="text-xs text-slate-300 italic font-bold">No roles</span>
           }
         </div>
-      } @else if (col.key === 'createdDate' || col.key === 'updatedDate') {
-        <div class="flex flex-col">
+        } @else if (col.key === 'createdDate' || col.key === 'updatedDate') {
+        <div class="flex flex-col py-1">
           @if (value) {
-            <span class="text-xs font-bold text-slate-700">{{ value | date:'yyyy-MM-dd HH:mm' }}</span>
-            <span class="text-[10px] text-slate-400 font-black uppercase tracking-tighter">
-              {{ 'common.by' | translate }}: {{ col.key === 'createdDate' ? row.createdBy : row.updatedBy }}
-            </span>
+          <span class="text-sm font-black text-slate-700 ">{{ value | date:'MMM d, yyyy' }}</span>
+          <span class="text-[10px] text-slate-400 font-black uppercase  mt-0.5">
+            {{ 'common.by' | translate }}: {{ col.key === 'createdDate' ? row.createdBy : row.updatedBy }}
+          </span>
           } @else {
-            <span class="text-[10px] text-slate-300 italic">-</span>
+          <span class="text-xs text-slate-300 italic font-bold">-</span>
           }
         </div>
-      } @else if (col.key === 'actions') {
-        <div class="flex justify-end gap-1">
+        } @else if (col.key === 'actions') {
+        <div class="flex justify-end gap-2 pr-4">
           @if (permissionService.canUpdate('users')) {
-            <button
-              type="button"
-              class="p-1.5 text-slate-400 hover:text-primary-600 hover:bg-primary-50 rounded-md transition-all"
-              title="Edit user"
-              (click)="openEditPopup(row)"
-            >
-              <i class="bi bi-pencil-square"></i>
-            </button>
+          <button type="button" (click)="openEditPopup(row)"
+            class="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all">
+            <i class="bi bi-pencil-fill text-lg"></i>
+          </button>
           }
           @if (permissionService.canDelete('users')) {
-            <button
-              type="button"
-              class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-all"
-              title="Delete user"
-              (click)="deleteUser(row.id!)"
-            >
-              <i class="bi bi-trash3"></i>
-            </button>
+          <button type="button" (click)="deleteUser(row.id!)"
+            class="w-10 h-10 flex items-center justify-center text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all">
+            <i class="bi bi-trash3-fill text-lg"></i>
+          </button>
           }
         </div>
-      } @else {
-        <span class="text-sm text-slate-600">{{ value }}</span>
-      }
-    </ng-template>
-  </app-table>
+        } @else {
+        <span class="text-base font-bold text-slate-600">{{ value }}</span>
+        }
+      </ng-template>
+    </app-table>
+  </div>
 </div>
 
-<!-- Modal Backdrop -->
+<!-- Creative Modal Backdrop -->
 @if (isPopupOpen()) {
+<div
+  class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-500">
   <div
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200"
-  >
-    <div
-      class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-in zoom-in-95 duration-200"
-    >
-      <div
-        class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between"
-      >
-        <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-          <i
-            class="bi"
-            [class.bi-person-plus]="!isEditMode()"
-            [class.bi-pencil-square]="isEditMode()"
-          ></i>
-          {{ (isEditMode() ? 'user.edit' : 'user.add') | translate }}
-        </h3>
-        <button type="button" class="text-slate-400 hover:text-slate-600" (click)="closePopup()">
-          <i class="bi bi-xl text-2xl"></i>
+    class="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-xl overflow-hidden animate-in zoom-in-95 duration-300 border border-white/20">
+    <div class="p-8 space-y-8">
+      <div class="flex justify-between items-start">
+        <div
+          class="w-14 h-14 bg-indigo-600 text-white rounded-2xl flex items-center justify-center text-2xl shadow-xl shadow-indigo-100">
+          <i class="bi" [class.bi-person-plus-fill]="!isEditMode()" [class.bi-pencil-square]="isEditMode()"></i>
+        </div>
+        <button (click)="closePopup()"
+          class="w-10 h-10 flex items-center justify-center hover:bg-red-50 hover:text-red-600 rounded-xl transition-all text-slate-300">
+          <i class="bi bi-x-lg text-xl"></i>
         </button>
       </div>
 
-      <div class="p-6">
-        @if (actionMessage()) {
-          <div
-            class="mb-6 p-4 rounded-xl border text-sm flex items-center gap-3 animate-in slide-in-from-top-2 duration-300"
-            [class]="
-              actionError()
-                ? 'bg-red-50 border-red-100 text-red-700'
-                : 'bg-green-50 border-green-100 text-green-700'
-            "
-          >
-            <i
-              class="bi"
-              [class]="actionError() ? 'bi-exclamation-circle-fill' : 'bi-check-circle-fill'"
-            ></i>
-            {{ actionMessage() }}
-          </div>
-        }
-
-        <form [formGroup]="userForm" (ngSubmit)="submitUserForm()" class="space-y-4">
-          <div class="grid grid-cols-2 gap-4">
-            <div class="space-y-1">
-              <label class="label-pro">{{ 'user.username' | translate }}</label>
-              <input
-                formControlName="username"
-                class="input-pro"
-                [placeholder]="'user.username' | translate"
-              />
-            </div>
-            <div class="space-y-1">
-              <label class="label-pro">{{ 'user.email' | translate }}</label>
-              <input
-                formControlName="email"
-                type="email"
-                class="input-pro"
-                placeholder="name@example.com"
-              />
-            </div>
-          </div>
-
-          <div class="space-y-1">
-            <label class="label-pro">{{ 'user.password' | translate }}</label>
-            <input
-              formControlName="password"
-              type="password"
-              class="input-pro"
-              [placeholder]="isEditMode() ? 'Leave blank to keep current' : 'Choose a password'"
-            />
-          </div>
-
-          <div class="grid grid-cols-2 gap-4">
-            <div class="space-y-1">
-              <label class="label-pro">{{ 'user.roles' | translate }}</label>
-              <select formControlName="roles" multiple class="input-pro h-24">
-                <option value="ADMIN">ADMIN</option>
-                <option value="MANAGER">MANAGER</option>
-                <option value="USER">USER</option>
-              </select>
-              <p class="text-xs text-slate-500 mt-1">Hold Ctrl (or Cmd) to select multiple.</p>
-            </div>
-            <div class="flex flex-col gap-3 pt-7 px-2">
-              <label class="flex items-center gap-2 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  formControlName="enabled"
-                  class="w-4 h-4 rounded text-primary-600 focus:ring-primary-500 border-slate-300"
-                />
-                <span
-                  class="text-sm font-semibold text-slate-700 group-hover:text-primary-600 transition-colors"
-                  >{{ 'user.enabled' | translate }}</span
-                >
-              </label>
-
-              <label class="flex items-center gap-2 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  formControlName="passwordResetRequired"
-                  class="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 border-slate-300"
-                />
-                <span
-                  class="text-sm font-semibold text-slate-700 group-hover:text-amber-600 transition-colors"
-                  >{{ 'user.force_reset' | translate }}</span
-                >
-              </label>
-            </div>
-          </div>
-
-          <div class="pt-6 flex gap-3">
-            <button type="button" class="btn-secondary flex-1" (click)="closePopup()">
-              {{ 'common.cancel' | translate }}
-            </button>
-            <button type="submit" class="btn-primary flex-1">
-              {{ 'common.save' | translate }}
-            </button>
-          </div>
-        </form>
+      <div class="space-y-1.5">
+        <h3 class="text-2xl font-black text-slate-900 ">{{ (isEditMode() ? 'user.edit' : 'user.add') | translate }}</h3>
+        <p class="text-slate-500 text-base font-medium leading-relaxed">
+          Manage user identity, access roles, and account security.
+        </p>
       </div>
+
+      @if (actionMessage()) {
+      <div class="p-4 rounded-xl text-sm font-black flex items-center gap-3 animate-in slide-in-from-top-4 shadow-sm"
+        [class]="actionError() ? 'bg-red-50 text-red-700 border border-red-100' : 'bg-emerald-50 text-emerald-700 border border-emerald-100'">
+        <i class="bi" [class]="actionError() ? 'bi-x-circle-fill' : 'bi-check-circle-fill'"></i>
+        {{ actionMessage() }}
+      </div>
+      }
+
+      <form [formGroup]="userForm" (ngSubmit)="submitUserForm()" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-1.5">
+            <label class="text-xs font-black text-slate-500 uppercase  ml-1">{{ 'user.username' | translate }}</label>
+            <input formControlName="username"
+              class="w-full px-6 py-4 bg-slate-50 border-transparent rounded-2xl text-slate-900 font-black focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/30 transition-all outline-none text-base shadow-inner"
+              [placeholder]="'user.username' | translate" />
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-xs font-black text-slate-500 uppercase  ml-1">{{ 'user.email' | translate }}</label>
+            <input formControlName="email" type="email"
+              class="w-full px-6 py-4 bg-slate-50 border-transparent rounded-2xl text-slate-900 font-black focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/30 transition-all outline-none text-base shadow-inner"
+              placeholder="name@example.com" />
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-xs font-black text-slate-500 uppercase  ml-1">{{ 'user.password' | translate }}</label>
+          <input formControlName="password" type="password"
+            class="w-full px-6 py-4 bg-slate-50 border-transparent rounded-2xl text-slate-900 font-black focus:bg-white focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/30 transition-all outline-none text-base shadow-inner"
+            [placeholder]="isEditMode() ? '••••••••' : 'Choose a secure password'" />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-1.5">
+            <label class="text-xs font-black text-slate-500 uppercase  ml-1">{{ 'user.roles' | translate }}</label>
+            <select formControlName="roles" multiple
+              class="w-full px-4 py-3 bg-slate-50 border-transparent rounded-2xl text-slate-900 font-black focus:bg-white focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none text-sm h-28 scrollbar-hide shadow-inner">
+              <option value="ADMIN">ADMIN</option>
+              <option value="MANAGER">MANAGER</option>
+              <option value="USER">USER</option>
+            </select>
+          </div>
+          <div class="flex flex-col gap-4 pt-6 px-2 justify-center">
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" formControlName="enabled"
+                class="w-5 h-5 rounded-md text-emerald-600 focus:ring-emerald-500 border-slate-300 transition-all cursor-pointer" />
+              <span
+                class="text-sm font-black text-slate-700 group-hover:text-emerald-600 transition-colors uppercase ">{{
+                'user.enabled' | translate }}</span>
+            </label>
+
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" formControlName="passwordResetRequired"
+                class="w-5 h-5 rounded-md text-amber-600 focus:ring-amber-500 border-slate-300 transition-all cursor-pointer" />
+              <span class="text-sm font-black text-slate-700 group-hover:text-amber-600 transition-colors uppercase ">{{
+                'user.force_reset' | translate }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="pt-6 flex gap-3">
+          <button type="button" (click)="closePopup()"
+            class="flex-1 py-4 bg-slate-100 text-slate-500 text-sm font-black uppercase  rounded-2xl hover:bg-slate-200 transition-all">
+            {{ 'common.cancel' | translate }}
+          </button>
+          <button type="submit"
+            class="flex-1 py-4 bg-slate-900 text-white text-sm font-black uppercase  rounded-2xl hover:bg-indigo-600 hover:-translate-y-1 transition-all shadow-lg shadow-indigo-100">
+            {{ 'common.save' | translate }}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 }

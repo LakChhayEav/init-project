@@ -12,6 +12,7 @@
 
 /* Base Styles */
 @layer base {
+
   html,
   body {
     height: 100%;
@@ -52,6 +53,22 @@
 
   .btn-secondary {
     @apply flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 shadow-sm transition-all duration-200 hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98];
+  }
+
+  .nav-item-creative {
+    @apply flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-300 relative text-slate-400 hover:text-white hover:bg-white/10;
+  }
+
+  .nav-item-creative.active {
+    @apply bg-indigo-600 text-white shadow-lg shadow-indigo-900/40 z-10;
+  }
+
+  .subnav-item-creative {
+    @apply flex items-center gap-2 px-3 py-2.5 rounded-lg text-slate-500 font-bold transition-all duration-200 hover:bg-slate-800 hover:text-white text-sm;
+  }
+
+  .subnav-item-creative.active {
+    @apply text-white bg-indigo-500/20 ring-1 ring-indigo-500/30;
   }
 }
 
