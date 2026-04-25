@@ -26,11 +26,31 @@
     </button>
   </div>
 
+  <!-- Creative Search Menu -->
+  <div class="px-4 mb-4 relative z-10">
+    <div class="relative group">
+      <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none transition-transform group-focus-within:scale-110">
+        <i class="bi bi-search text-slate-500 text-sm"></i>
+      </div>
+      <input 
+        type="text"
+        [placeholder]="navService.isSidebarOpen() ? ('common.search' | translate) : ''"
+        (input)="onSearch($event)"
+        [class.w-full]="navService.isSidebarOpen()"
+        [class.w-10]="!navService.isSidebarOpen()"
+        [class.pl-10]="navService.isSidebarOpen()"
+        [class.pl-0]="!navService.isSidebarOpen()"
+        class="bg-slate-800/40 border-transparent rounded-xl py-2.5 pr-4 text-xs font-black text-white placeholder-slate-500 focus:bg-slate-800/60 focus:ring-2 focus:ring-indigo-500/30 transition-all outline-none shadow-inner cursor-pointer"
+        (click)="!navService.isSidebarOpen() ? navService.toggleSidebar() : null"
+      />
+    </div>
+  </div>
+
   <!-- Navigation Section -->
-  <nav class="flex-1 px-4 py-4 space-y-2 overflow-y-auto overflow-x-hidden scrollbar-hide relative z-10">
+  <nav class="flex-1 px-4 py-2 space-y-2 overflow-y-auto overflow-x-hidden scrollbar-hide relative z-10">
     
     <!-- Dashboard Link -->
-    @if (permissionService.canView('main')) {
+    @if (shouldShow('main', 'nav.main')) {
     <button type="button" 
       class="nav-item-creative group"
       [class.active]="navService.isTabTypeActive('main')"
@@ -48,7 +68,7 @@
     }
 
     <!-- Tasks Link -->
-    @if (permissionService.canView('tasks')) {
+    @if (shouldShow('tasks', 'nav.tasks')) {
     <button type="button" 
       class="nav-item-creative group"
       [class.active]="navService.isTabTypeActive('tasks')"
@@ -66,7 +86,7 @@
     }
 
     <!-- Security Section -->
-    @if (permissionService.canView('users') || permissionService.canView('permissions') || permissionService.canView('change-password')) {
+    @if (shouldShow('users', 'nav.users') || shouldShow('permissions', 'nav.permissions') || shouldShow('change-password', 'nav.change-password')) {
     <div class="space-y-1">
       <button type="button" 
         class="nav-item-creative w-full group"
@@ -83,7 +103,7 @@
 
       @if (isSecurityMenuOpen() && navService.isSidebarOpen()) {
       <div class="ml-6 pl-4 border-l-2 border-slate-800 space-y-1 animate-in slide-in-from-left-2 duration-300">
-        @if (permissionService.canView('users')) {
+        @if (shouldShow('users', 'nav.users')) {
         <button type="button" 
           class="subnav-item-creative group"
           [class.active]="navService.isTabTypeActive('users')"
@@ -92,7 +112,7 @@
         </button>
         }
 
-        @if (permissionService.canView('permissions')) {
+        @if (shouldShow('permissions', 'nav.permissions')) {
         <button type="button" 
           class="subnav-item-creative group"
           [class.active]="navService.isTabTypeActive('permissions')"
@@ -101,12 +121,14 @@
         </button>
         }
 
+        @if (shouldShow('change-password', 'nav.change-password')) {
         <button type="button" 
           class="subnav-item-creative group"
           [class.active]="navService.isTabTypeActive('change-password')"
           (click)="navService.openMenuTab('change-password')">
           <i class="bi bi-lock-fill"></i> <span class="text-sm font-black">{{ 'nav.change-password' | translate }}</span>
         </button>
+        }
       </div>
       }
     </div>

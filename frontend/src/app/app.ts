@@ -24,7 +24,6 @@ import { TranslatePipe } from './translate.pipe';
   standalone: true,
   imports: [
     RouterOutlet,
-    TranslatePipe,
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
