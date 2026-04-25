@@ -36,6 +36,7 @@
       [class.active]="navService.isTabTypeActive('main')"
       [class.justify-center]="!navService.isSidebarOpen()"
       (click)="navService.openMenuTab('main')"
+      (contextmenu)="openContextMenu($event, 'main')"
       [title]="!navService.isSidebarOpen() ? ('nav.main' | translate) : ''">
       <i class="bi bi-grid-1x2-fill text-xl"></i> 
       @if (navService.isSidebarOpen()) {
@@ -54,6 +55,7 @@
       [class.active]="navService.isTabTypeActive('tasks')"
       [class.justify-center]="!navService.isSidebarOpen()"
       (click)="navService.openMenuTab('tasks')"
+      (contextmenu)="openContextMenu($event, 'tasks')"
       [title]="!navService.isSidebarOpen() ? ('nav.tasks' | translate) : ''">
       <i class="bi bi-collection-fill text-xl"></i>
       @if (navService.isSidebarOpen()) {
@@ -73,6 +75,7 @@
         [class.active-parent]="isSecurityMenuOpen() && navService.isSidebarOpen()"
         [class.justify-center]="!navService.isSidebarOpen()"
         (click)="toggleSecurityMenu()"
+        (contextmenu)="openContextMenu($event, 'users')"
         [title]="!navService.isSidebarOpen() ? ('nav.security' | translate) : ''">
         <i class="bi bi-shield-fill-check text-xl"></i>
         @if (navService.isSidebarOpen()) {
@@ -87,7 +90,8 @@
         <button type="button" 
           class="subnav-item-creative group"
           [class.active]="navService.isTabTypeActive('users')"
-          (click)="navService.openMenuTab('users')">
+          (click)="navService.openMenuTab('users')"
+          (contextmenu)="openContextMenu($event, 'users')">
           <i class="bi bi-people-fill"></i> <span class="text-sm font-black">{{ 'nav.users' | translate }}</span>
         </button>
         }
@@ -96,7 +100,8 @@
         <button type="button" 
           class="subnav-item-creative group"
           [class.active]="navService.isTabTypeActive('permissions')"
-          (click)="navService.openMenuTab('permissions')">
+          (click)="navService.openMenuTab('permissions')"
+          (contextmenu)="openContextMenu($event, 'permissions')">
           <i class="bi bi-key-fill"></i> <span class="text-sm font-black">{{ 'nav.permissions' | translate }}</span>
         </button>
         }
@@ -104,7 +109,8 @@
         <button type="button" 
           class="subnav-item-creative group"
           [class.active]="navService.isTabTypeActive('change-password')"
-          (click)="navService.openMenuTab('change-password')">
+          (click)="navService.openMenuTab('change-password')"
+          (contextmenu)="openContextMenu($event, 'change-password')">
           <i class="bi bi-lock-fill"></i> <span class="text-sm font-black">{{ 'nav.change-password' | translate }}</span>
         </button>
       </div>
@@ -127,3 +133,32 @@
     </div>
   </div>
 </aside>
+
+<!-- Context Menu -->
+@if (contextMenu(); as menu) {
+<div class="fixed z-[100] bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-800 p-2 w-56 animate-in fade-in zoom-in-95 duration-300 text-white"
+  [style.left.px]="menu.x" [style.top.px]="menu.y">
+  <button class="w-full text-left px-4 py-3 text-sm font-bold text-slate-300 hover:bg-indigo-600 hover:text-white rounded-xl transition-all flex items-center gap-4 group"
+    (click)="navService.openMenuTab(menu.type)">
+    <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center group-hover:bg-indigo-500 transition-colors">
+      <i class="bi bi-plus-lg"></i>
+    </div> 
+    {{ 'common.add' | translate }} {{ 'nav.' + menu.type | translate }}
+  </button>
+  <button class="w-full text-left px-4 py-3 text-sm font-bold text-slate-300 hover:bg-slate-800 hover:text-white rounded-xl transition-all flex items-center gap-4 group"
+    (click)="navService.toggleSidebar()">
+    <div class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center group-hover:bg-slate-700 transition-colors">
+      <i class="bi" [class.bi-text-indent-left]="navService.isSidebarOpen()" [class.bi-text-indent-right]="!navService.isSidebarOpen()"></i>
+    </div> 
+    {{ (navService.isSidebarOpen() ? 'common.close' : 'common.add') | translate }} Sidebar
+  </button>
+  <div class="h-px bg-slate-800 my-2 mx-2"></div>
+  <button class="w-full text-left px-4 py-3 text-sm font-bold text-red-400 hover:bg-red-500/10 hover:text-red-500 rounded-xl transition-all flex items-center gap-4 group"
+    (click)="logout()">
+    <div class="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center group-hover:bg-red-500/20 transition-colors">
+      <i class="bi bi-power"></i>
+    </div> 
+    {{ 'auth.logout' | translate }}
+  </button>
+</div>
+}

@@ -231,16 +231,21 @@ export class UserListComponent {
     this.confirmService.open({
       title: 'confirm.user.status.title',
       message: 'confirm.user.status.message',
-      confirmText: 'role.update',
+      confirmText: 'common.save',
       onConfirm: () => {
-        this.userService.updateUser(user.id!, user).subscribe({
+        const updatedUser = { ...user, enabled: !user.enabled };
+        this.userService.updateUser(user.id!, updatedUser).subscribe({
+          next: () => {
+            // Update the signal to trigger UI refresh with the new object reference
+            this.users.update(users => users.map(u => u.id === user.id ? updatedUser : u));
+          },
           error: () => {
-            user.enabled = !user.enabled; // revert on error
+            // On error, the UI remains in the previous state because we didn't update the signal yet
           },
         });
       },
       onCancel: () => {
-        user.enabled = !user.enabled; // revert visually
+        // Do nothing, UI stays in the current state
       }
     });
   }

@@ -20,6 +20,7 @@ export class SidebarComponent {
   private readonly router = inject(Router);
 
   readonly isSecurityMenuOpen = signal(false);
+  readonly contextMenu = signal<{ x: number; y: number; type: MenuTabType } | null>(null);
 
   toggleSecurityMenu(): void {
     if (!this.navService.isSidebarOpen()) {
@@ -28,6 +29,17 @@ export class SidebarComponent {
     } else {
       this.isSecurityMenuOpen.update((v) => !v);
     }
+  }
+
+  openContextMenu(event: MouseEvent, type: MenuTabType): void {
+    event.preventDefault();
+    this.contextMenu.set({ x: event.clientX, y: event.clientY, type });
+    
+    const closeMenu = () => {
+      this.contextMenu.set(null);
+      document.removeEventListener('click', closeMenu);
+    };
+    document.addEventListener('click', closeMenu);
   }
 
   logout(): void {
