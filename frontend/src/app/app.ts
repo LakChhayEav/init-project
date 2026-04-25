@@ -44,20 +44,6 @@ export class AppComponent {
   readonly langService = inject(LanguageService);
   readonly navService = inject(NavigationService);
   readonly permissionService = inject(PermissionService);
-  
-  readonly contextMenu = signal<{ x: number; y: number; tabId: string } | null>(null);
-
-  openContextMenu(event: MouseEvent, tabId: string): void {
-    event.preventDefault();
-    this.contextMenu.set({ x: event.clientX, y: event.clientY, tabId });
-    
-    // Close on click outside
-    const closeMenu = () => {
-      this.contextMenu.set(null);
-      document.removeEventListener('click', closeMenu);
-    };
-    document.addEventListener('click', closeMenu);
-  }
 
   constructor() {
     effect(() => {
