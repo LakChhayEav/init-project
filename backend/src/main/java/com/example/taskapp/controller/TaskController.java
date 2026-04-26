@@ -11,13 +11,13 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")
-@CrossOrigin(origins = "http://localhost:4500")
 public class TaskController {
     private final TaskService taskService;
 
@@ -26,6 +26,7 @@ public class TaskController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('TASKS_VIEW')")
     @Operation(operationId = "Tasks", summary = "Get All Tasks", description = "Retrieve a list of all tasks in the system.")
     @ApiResponse(
             responseCode = "200",
@@ -41,6 +42,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('TASKS_VIEW')")
     @Operation(operationId = "Tasks", summary = "Get Task by ID", description = "Retrieve a specific task by its unique ID.")
     @ApiResponse(
             responseCode = "200",
@@ -56,6 +58,7 @@ public class TaskController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('TASKS_CREATE')")
     @Operation(operationId = "Tasks", summary = "Create Task", description = "Add a new task to the collection.")
     @ApiResponse(
             responseCode = "200",
@@ -71,6 +74,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('TASKS_UPDATE')")
     @Operation(operationId = "Tasks", summary = "Update Task", description = "Modify the properties of an existing task.")
     @ApiResponse(
             responseCode = "200",
@@ -87,6 +91,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('TASKS_DELETE')")
     @Operation(operationId = "Tasks", summary = "Delete Task", description = "Remove a task from the system.")
     @ApiResponse(
             responseCode = "200",

@@ -13,11 +13,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import com.example.taskapp.core.util.ResponseUtils;
 import com.example.taskapp.model.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:4500")
 public class UserController {
     private final UserService userService;
 
@@ -26,6 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/search")
+    @PreAuthorize("hasAuthority('USERS_VIEW')")
     @Operation(operationId = "Users", summary = "Search Users", description = "Retrieve a paginated list of users with filtering and sorting options.")
     @ApiResponse(
             responseCode = "200",
@@ -41,6 +42,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
+    @PreAuthorize("hasAuthority('USERS_VIEW')")
     @Operation(operationId = "Users", summary = "Get User by ID", description = "Retrieve detailed information for a specific user by their unique ID.")
     @ApiResponse(
             responseCode = "200",
@@ -56,6 +58,7 @@ public class UserController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('USERS_CREATE')")
     @Operation(operationId = "Users", summary = "Create User", description = "Register a new user in the system.")
     @ApiResponse(
             responseCode = "200",
@@ -71,6 +74,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('USERS_UPDATE')")
     @Operation(operationId = "Users", summary = "Update User", description = "Modify the details of an existing user.")
     @ApiResponse(
             responseCode = "200",
@@ -87,6 +91,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('USERS_DELETE')")
     @Operation(operationId = "Users", summary = "Delete User", description = "Permanently remove a user from the system.")
     @ApiResponse(
             responseCode = "200",
@@ -102,6 +107,7 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/roles/{roleId}")
+    @PreAuthorize("hasAuthority('USERS_UPDATE')")
     @Operation(operationId = "Users", summary = "Add Role to User", description = "Assign a specific security role to a user.")
     @ApiResponse(
             responseCode = "200",
@@ -117,6 +123,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}/roles/{roleId}")
+    @PreAuthorize("hasAuthority('USERS_UPDATE')")
     @Operation(operationId = "Users", summary = "Remove Role from User", description = "Revoke a specific security role from a user.")
     @ApiResponse(
             responseCode = "200",

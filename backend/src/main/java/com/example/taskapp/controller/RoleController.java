@@ -11,12 +11,12 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/roles")
-@CrossOrigin(origins = "http://localhost:4500")
 public class RoleController {
     private final RoleService roleService;
 
@@ -25,6 +25,7 @@ public class RoleController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLES_VIEW')")
     @Operation(operationId = "Roles", summary = "Get All Roles", description = "Retrieve a list of all security roles.")
     @ApiResponse(
             responseCode = "200",
@@ -40,6 +41,7 @@ public class RoleController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLES_VIEW')")
     @Operation(operationId = "Roles", summary = "Get Role by ID", description = "Retrieve a specific role by its unique ID.")
     @ApiResponse(
             responseCode = "200",
@@ -55,6 +57,7 @@ public class RoleController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLES_CREATE')")
     @Operation(operationId = "Roles", summary = "Create Role", description = "Create a new security role.")
     @ApiResponse(
             responseCode = "200",
@@ -70,6 +73,7 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLES_UPDATE')")
     @Operation(operationId = "Roles", summary = "Update Role", description = "Modify an existing security role.")
     @ApiResponse(
             responseCode = "200",
@@ -86,6 +90,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLES_DELETE')")
     @Operation(operationId = "Roles", summary = "Delete Role", description = "Permanently remove a security role.")
     @ApiResponse(
             responseCode = "200",
@@ -101,6 +106,7 @@ public class RoleController {
     }
 
     @PostMapping("/{roleId}/permissions/{permissionId}")
+    @PreAuthorize("hasAuthority('ROLES_UPDATE')")
     @Operation(operationId = "Roles", summary = "Assign Permission", description = "Link a permission to a specific role.")
     @ApiResponse(
             responseCode = "200",
@@ -116,6 +122,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{roleId}/permissions/{permissionId}")
+    @PreAuthorize("hasAuthority('ROLES_UPDATE')")
     @Operation(operationId = "Roles", summary = "Revoke Permission", description = "Remove a permission link from a role.")
     @ApiResponse(
             responseCode = "200",
@@ -131,6 +138,7 @@ public class RoleController {
     }
 
     @PutMapping("/{id}/permissions")
+    @PreAuthorize("hasAuthority('ROLES_UPDATE')")
     @Operation(operationId = "Roles", summary = "Update Role Permissions", description = "Bulk update permissions associated with a role.")
     @ApiResponse(
             responseCode = "200",

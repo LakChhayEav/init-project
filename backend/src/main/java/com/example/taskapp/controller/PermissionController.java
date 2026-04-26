@@ -11,11 +11,11 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/permissions")
-@CrossOrigin(origins = "http://localhost:4500")
 public class PermissionController {
     private final PermissionService permissionService;
 
@@ -24,6 +24,7 @@ public class PermissionController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('PERMISSIONS_VIEW')")
     @Operation(operationId = "Permissions", summary = "Get All Permissions", description = "Retrieve a list of all available system permissions.")
     @ApiResponse(
             responseCode = "200",
