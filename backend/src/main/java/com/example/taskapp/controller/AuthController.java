@@ -83,7 +83,7 @@ public class AuthController {
         var newPassword = request.get("newPassword");
         
         userService.changePassword(username, newPassword);
-        return ResponseUtils.success("Password updated successfully");
+        return ResponseUtils.success(Api.CodeMessage.updated);
     }
 
 }

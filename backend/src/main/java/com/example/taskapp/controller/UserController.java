@@ -67,7 +67,7 @@ public class UserController {
     )
     public ResponseEntity<?> createUser(@RequestBody User user) {
         userService.createUser(user);
-        return ResponseUtils.success("User created successfully");
+        return ResponseUtils.success(Api.CodeMessage.created);
     }
 
     @PutMapping("/{id}")
@@ -83,7 +83,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody User user) {
         user.setId(id);
         userService.updateUser(user);
-        return ResponseUtils.success("User updated successfully");
+        return ResponseUtils.success(Api.CodeMessage.updated);
     }
 
     @DeleteMapping("/{id}")
@@ -98,7 +98,7 @@ public class UserController {
     )
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
-        return ResponseUtils.success("User deleted successfully");
+        return ResponseUtils.success(Api.CodeMessage.deleted);
     }
 
     @PostMapping("/{userId}/roles/{roleId}")
@@ -113,7 +113,7 @@ public class UserController {
     )
     public ResponseEntity<?> addRoleToUser(@PathVariable Integer userId, @PathVariable Integer roleId) {
         userService.addRoleToUser(userId, roleId);
-        return ResponseUtils.success("Role added to user");
+        return ResponseUtils.success(Api.CodeMessage.success);
     }
 
     @DeleteMapping("/{userId}/roles/{roleId}")
@@ -128,6 +128,6 @@ public class UserController {
     )
     public ResponseEntity<?> removeRoleFromUser(@PathVariable Integer userId, @PathVariable Integer roleId) {
         userService.removeRoleFromUser(userId, roleId);
-        return ResponseUtils.success("Role removed from user");
+        return ResponseUtils.success(Api.CodeMessage.success);
     }
 }

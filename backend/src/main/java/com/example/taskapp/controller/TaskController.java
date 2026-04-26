@@ -67,7 +67,7 @@ public class TaskController {
     )
     public ResponseEntity<?> createTask(@RequestBody Task task) {
         taskService.createTask(task);
-        return ResponseUtils.success("Task created successfully");
+        return ResponseUtils.success(Api.CodeMessage.created);
     }
 
     @PutMapping("/{id}")
@@ -83,7 +83,7 @@ public class TaskController {
     public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody Task task) {
         task.setId(id);
         taskService.updateTask(task);
-        return ResponseUtils.success("Task updated successfully");
+        return ResponseUtils.success(Api.CodeMessage.updated);
     }
 
     @DeleteMapping("/{id}")
@@ -98,6 +98,6 @@ public class TaskController {
     )
     public ResponseEntity<?> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
-        return ResponseUtils.success("Task deleted successfully");
+        return ResponseUtils.success(Api.CodeMessage.deleted);
     }
 }

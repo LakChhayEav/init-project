@@ -83,10 +83,6 @@ export class UserListComponent {
   });
 
   constructor() {
-    afterNextRender(() => {
-      this.loadUsers();
-    });
-
     // Refetch when page or size changes (Browser only to avoid SSR 403)
     if (isPlatformBrowser(inject(PLATFORM_ID))) {
       effect(() => {

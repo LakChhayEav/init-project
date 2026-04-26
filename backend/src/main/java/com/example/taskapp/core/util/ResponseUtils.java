@@ -2,6 +2,7 @@ package com.example.taskapp.core.util;
 
 import com.example.taskapp.core.dto.ApiResponse;
 import com.example.taskapp.core.dto.PageResponse;
+import com.example.taskapp.config.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -38,22 +39,22 @@ public class ResponseUtils {
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> badRequest(String message) {
-        return error(HttpStatus.BAD_REQUEST, "400", message);
+        return error(HttpStatus.BAD_REQUEST, "400", message != null ? message : Api.CodeMessage.badRequest);
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> unauthorized(String message) {
-        return error(HttpStatus.UNAUTHORIZED, "401", message);
+        return error(HttpStatus.UNAUTHORIZED, "401", message != null ? message : Api.CodeMessage.unauthorized);
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> forbidden(String message) {
-        return error(HttpStatus.FORBIDDEN, "403", message);
+        return error(HttpStatus.FORBIDDEN, "403", message != null ? message : Api.CodeMessage.forbidden);
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> notFound(String message) {
-        return error(HttpStatus.NOT_FOUND, "404", message);
+        return error(HttpStatus.NOT_FOUND, "404", message != null ? message : Api.CodeMessage.notFound);
     }
 
     public static <T> ResponseEntity<ApiResponse<T>> internalError(String message) {
-        return error(HttpStatus.INTERNAL_SERVER_ERROR, "500", message);
+        return error(HttpStatus.INTERNAL_SERVER_ERROR, "500", message != null ? message : Api.CodeMessage.error);
     }
 }

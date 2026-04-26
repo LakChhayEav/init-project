@@ -66,7 +66,7 @@ public class RoleController {
     )
     public ResponseEntity<?> createRole(@RequestBody Role role) {
         roleService.createRole(role);
-        return ResponseUtils.success("Role created successfully");
+        return ResponseUtils.success(Api.CodeMessage.created);
     }
 
     @PutMapping("/{id}")
@@ -82,7 +82,7 @@ public class RoleController {
     public ResponseEntity<?> updateRole(@PathVariable Integer id, @RequestBody Role role) {
         role.setId(id);
         roleService.updateRole(role);
-        return ResponseUtils.success("Role updated successfully");
+        return ResponseUtils.success(Api.CodeMessage.updated);
     }
 
     @DeleteMapping("/{id}")
@@ -97,7 +97,7 @@ public class RoleController {
     )
     public ResponseEntity<?> deleteRole(@PathVariable Integer id) {
         roleService.deleteRole(id);
-        return ResponseUtils.success("Role deleted successfully");
+        return ResponseUtils.success(Api.CodeMessage.deleted);
     }
 
     @PostMapping("/{roleId}/permissions/{permissionId}")
@@ -112,7 +112,7 @@ public class RoleController {
     )
     public ResponseEntity<?> assignPermission(@PathVariable Integer roleId, @PathVariable Integer permissionId) {
         roleService.assignPermission(roleId, permissionId);
-        return ResponseUtils.success("Permission assigned successfully");
+        return ResponseUtils.success(Api.CodeMessage.success);
     }
 
     @DeleteMapping("/{roleId}/permissions/{permissionId}")
@@ -127,7 +127,7 @@ public class RoleController {
     )
     public ResponseEntity<?> revokePermission(@PathVariable Integer roleId, @PathVariable Integer permissionId) {
         roleService.revokePermission(roleId, permissionId);
-        return ResponseUtils.success("Permission revoked successfully");
+        return ResponseUtils.success(Api.CodeMessage.success);
     }
 
     @PutMapping("/{id}/permissions")
@@ -142,6 +142,6 @@ public class RoleController {
     )
     public ResponseEntity<?> updateRolePermissions(@PathVariable Integer id, @RequestBody List<Integer> permissionIds) {
         roleService.updateRolePermissions(id, permissionIds);
-        return ResponseUtils.success("Role permissions updated successfully");
+        return ResponseUtils.success(Api.CodeMessage.updated);
     }
 }
