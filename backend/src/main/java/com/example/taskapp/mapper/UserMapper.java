@@ -14,7 +14,10 @@ public interface UserMapper {
     User findByUsername(String username);
     void insert(User user);
     void update(User user);
-    void updatePassword(@Param("userId") Integer userId, @Param("password") String password);
+    void updatePassword(@Param("userId") Integer userId, 
+                        @Param("password") String password,
+                        @Param("updatedBy") String updatedBy,
+                        @Param("updatedDate") LocalDateTime updatedDate);
     void delete(Integer id);
     
     void addRoleToUser(@Param("userId") Integer userId, 

@@ -10,8 +10,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import com.example.taskapp.mapper.UserMapper;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,19 +22,13 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider tokenProvider;
     private final UserService userService;
-    private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
 
     public AuthController(AuthenticationManager authenticationManager, 
                           JwtTokenProvider tokenProvider, 
-                          UserService userService,
-                          UserMapper userMapper,
-                          PasswordEncoder passwordEncoder) {
+                          UserService userService) {
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
         this.userService = userService;
-        this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
@@ -51,7 +43,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateToken(authentication);
         
-        User user = userMapper.findByUsername(loginRequest.getUsername());
+        User user = userService.getUserByUsername(loginRequest.getUsername());
         
         System.out.println("DEBUG: User " + user.getUsername() + " reset required: " + user.isPasswordResetRequired());
         
@@ -68,12 +60,8 @@ public class AuthController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         String newPassword = request.get("newPassword");
         
-        User user = userMapper.findByUsername(username);
-        if (user != null) {
-            userMapper.updatePassword(user.getId(), passwordEncoder.encode(newPassword));
-            return Map.of("message", "Password updated successfully");
-        }
-        throw new RuntimeException("User not found");
+        userService.changePassword(username, newPassword);
+        return Map.of("message", "Password updated successfully");
     }
 
 }

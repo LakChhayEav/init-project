@@ -14,6 +14,7 @@ import { UserService } from '../../services/user.service';
 import { User } from '../../models/user.model';
 import { PermissionService } from '../../services/permission.service';
 import { ConfirmService } from '../../services/confirm.service';
+import { AuthService } from '../../services/auth.service';
 import { PageRequest } from '../../models/pagination.model';
 
 import { TranslatePipe } from '../../translate.pipe';
@@ -33,6 +34,7 @@ export class UserListComponent {
   private readonly fb = inject(FormBuilder);
   readonly permissionService = inject(PermissionService);
   private readonly confirmService = inject(ConfirmService);
+  private readonly authService = inject(AuthService);
 
   // --- State ---
   readonly users = signal<User[]>([]);
@@ -196,6 +198,8 @@ export class UserListComponent {
       roles: trimmed.roles.map(r => ({ name: r })),
       passwordResetRequired: trimmed.passwordResetRequired,
       ...(trimmed.password ? { password: trimmed.password } : {}),
+      updatedBy: this.authService.username ?? 'system',
+      updatedDate: new Date().toISOString(),
     };
 
     const executeRequest = () => {
@@ -233,11 +237,16 @@ export class UserListComponent {
       message: 'confirm.user.status.message',
       confirmText: 'common.save',
       onConfirm: () => {
-        const updatedUser = { ...user, enabled: !user.enabled };
+        const updatedUser = { 
+          ...user, 
+          enabled: !user.enabled,
+          updatedBy: this.authService.username ?? 'system',
+          updatedDate: new Date().toISOString()
+        };
         this.userService.updateUser(user.id!, updatedUser).subscribe({
-          next: () => {
-            // Update the signal to trigger UI refresh with the new object reference
-            this.users.update(users => users.map(u => u.id === user.id ? updatedUser : u));
+          next: (serverUser) => {
+            // Update the signal with the server-returned user to reflect new audit fields (updatedBy, updatedDate)
+            this.users.update(users => users.map(u => u.id === user.id ? serverUser : u));
           },
           error: () => {
             // On error, the UI remains in the previous state because we didn't update the signal yet

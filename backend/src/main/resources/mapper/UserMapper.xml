@@ -41,7 +41,12 @@
         SELECT * FROM users WHERE username = #{username} OR email = #{username}
     </select>
     <update id="updatePassword">
-        UPDATE users SET password = #{password}, password_reset_required = false WHERE id = #{userId}
+        UPDATE users 
+        SET password = #{password}, 
+            password_reset_required = false,
+            updated_by = #{updatedBy},
+            updated_date = #{updatedDate}
+        WHERE id = #{userId}
     </update>
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO users (username, email, password, enabled, created_by, created_date, updated_by, updated_date, password_reset_required)
