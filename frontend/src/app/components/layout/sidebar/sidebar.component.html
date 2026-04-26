@@ -39,7 +39,7 @@
         (input)="onSearch($event)" [class.w-full]="navService.isSidebarOpen()"
         [class.w-10]="!navService.isSidebarOpen()" [class.pl-10]="navService.isSidebarOpen()"
         [class.pl-0]="!navService.isSidebarOpen()"
-        class="bg-slate-800/40 border-transparent rounded-xl py-2.5 pr-4 text-xs font-black text-white placeholder-slate-500 focus:bg-slate-800/60 focus:ring-2 focus:ring-indigo-500/30 transition-all outline-none shadow-inner cursor-pointer"
+        class="bg-slate-800/40 border-transparent rounded-xl py-2.5 pr-4 text-xs font-bold text-white placeholder-slate-500 focus:bg-slate-800/60 focus:ring-2 focus:ring-indigo-500/30 transition-all outline-none shadow-inner cursor-pointer"
         (click)="!navService.isSidebarOpen() ? navService.toggleSidebar() : null" />
     </div>
   </div>
@@ -54,7 +54,7 @@
       [title]="!navService.isSidebarOpen() ? ('nav.main' | translate) : ''">
       <i class="bi bi-grid-1x2-fill text-xl"></i>
       @if (navService.isSidebarOpen()) {
-      <span class="font-black  text-base">{{ 'nav.main' | translate }}</span>
+      <span class="font-bold text-base">{{ 'nav.main' | translate }}</span>
       }
       @if (navService.isTabTypeActive('main') && navService.isSidebarOpen()) {
       <div class="ml-auto w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></div>
@@ -69,7 +69,7 @@
       [title]="!navService.isSidebarOpen() ? ('nav.tasks' | translate) : ''">
       <i class="bi bi-collection-fill text-xl"></i>
       @if (navService.isSidebarOpen()) {
-      <span class="font-black  text-base">{{ 'nav.tasks' | translate }}</span>
+      <span class="font-bold text-base">{{ 'nav.tasks' | translate }}</span>
       }
       @if (navService.isTabTypeActive('tasks') && navService.isSidebarOpen()) {
       <div class="ml-auto w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"></div>
@@ -87,7 +87,7 @@
         [title]="!navService.isSidebarOpen() ? ('nav.security' | translate) : ''">
         <i class="bi bi-shield-fill-check text-xl"></i>
         @if (navService.isSidebarOpen()) {
-        <span class="font-black  text-base">{{ 'nav.security' | translate }}</span>
+        <span class="font-bold text-base">{{ 'nav.security' | translate }}</span>
         <i class="bi text-[10px] ml-auto transition-transform duration-300"
           [class.bi-chevron-down]="isSecurityMenuOpen()" [class.bi-chevron-right]="!isSecurityMenuOpen()"></i>
         }
@@ -96,25 +96,27 @@
       @if (isSecurityMenuOpen() && navService.isSidebarOpen()) {
       <div class="ml-6 pl-4 border-l-2 border-slate-800 space-y-1 animate-in slide-in-from-left-2 duration-300">
         @if (shouldShow('users', 'nav.users')) {
-        <button type="button" class="subnav-item-creative group" [class.active]="navService.isTabTypeActive('users')"
-          (click)="navService.openMenuTab('users')">
-          <i class="bi bi-people-fill"></i> <span class="text-sm font-black">{{ 'nav.users' | translate }}</span>
+        <button type="button" class="subnav-item-creative w-full group"
+          [class.active]="navService.isTabTypeActive('users')" (click)="navService.openMenuTab('users')">
+          <i class="bi bi-people-fill text-lg"></i> <span class="font-bold whitespace-nowrap">{{ 'nav.users' | translate
+            }}</span>
         </button>
         }
 
         @if (shouldShow('permissions', 'nav.permissions')) {
-        <button type="button" class="subnav-item-creative group"
+        <button type="button" class="subnav-item-creative w-full group"
           [class.active]="navService.isTabTypeActive('permissions')" (click)="navService.openMenuTab('permissions')">
-          <i class="bi bi-key-fill"></i> <span class="text-sm font-black">{{ 'nav.permissions' | translate }}</span>
+          <i class="bi bi-key-fill text-lg"></i> <span class="font-bold whitespace-nowrap">{{ 'nav.permissions' |
+            translate }}</span>
         </button>
         }
 
         @if (shouldShow('change-password', 'nav.change-password')) {
-        <button type="button" class="subnav-item-creative group"
+        <button type="button" class="subnav-item-creative w-full group"
           [class.active]="navService.isTabTypeActive('change-password')"
           (click)="navService.openMenuTab('change-password')">
-          <i class="bi bi-lock-fill"></i> <span class="text-sm font-black">{{ 'nav.change-password' | translate
-            }}</span>
+          <i class="bi bi-lock-fill text-lg"></i> <span class="font-bold whitespace-nowrap">{{ 'nav.change-password' |
+            translate }}</span>
         </button>
         }
       </div>
@@ -127,7 +129,7 @@
   <div class="p-4 relative z-10">
     <div class="bg-slate-800/50 p-2 rounded-2xl border border-slate-700/30">
       <button (click)="logout()"
-        class="flex items-center justify-center gap-3 py-2 w-full bg-slate-900 hover:bg-red-600/90 rounded-xl transition-all duration-300 text-[10px] font-black  uppercase group"
+        class="flex items-center justify-center gap-3 py-2 w-full bg-slate-900 hover:bg-red-600/90 rounded-xl transition-all duration-300 text-xs font-bold group"
         [title]="!navService.isSidebarOpen() ? ('auth.logout' | translate) : ''">
         <i class="bi bi-power text-lg group-hover:scale-110 transition-transform"></i>
         @if (navService.isSidebarOpen()) {

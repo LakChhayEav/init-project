@@ -213,19 +213,19 @@
               <option value="USER">USER</option>
             </select>
           </div>
-          <div class="flex flex-col gap-4 pt-6 px-2 justify-center">
-            <label class="flex items-center gap-3 cursor-pointer group">
+          <div class="flex flex-col gap-4 pt-4 px-2 justify-center">
+            <label class="flex items-center gap-2.5 cursor-pointer group">
               <input type="checkbox" formControlName="enabled"
-                class="w-5 h-5 rounded-md text-emerald-600 focus:ring-emerald-500 border-slate-300 transition-all cursor-pointer" />
+                class="w-4 h-4 rounded text-indigo-600 focus:ring-4 focus:ring-indigo-500/10 border-slate-300 transition-all cursor-pointer flex-shrink-0" />
               <span
-                class="text-sm font-black text-slate-700 group-hover:text-emerald-600 transition-colors uppercase ">{{
+                class="text-xs font-bold text-slate-700 group-hover:text-indigo-600 transition-colors uppercase leading-tight">{{
                 'user.enabled' | translate }}</span>
             </label>
 
-            <label class="flex items-center gap-3 cursor-pointer group">
+            <label class="flex items-center gap-2.5 cursor-pointer group">
               <input type="checkbox" formControlName="passwordResetRequired"
-                class="w-5 h-5 rounded-md text-amber-600 focus:ring-amber-500 border-slate-300 transition-all cursor-pointer" />
-              <span class="text-sm font-black text-slate-700 group-hover:text-amber-600 transition-colors uppercase ">{{
+                class="w-4 h-4 rounded text-indigo-600 focus:ring-4 focus:ring-indigo-500/10 border-slate-300 transition-all cursor-pointer flex-shrink-0" />
+              <span class="text-sm font-bold text-slate-700 group-hover:text-indigo-600 transition-colors uppercase leading-tight">{{
                 'user.force_reset' | translate }}</span>
             </label>
           </div>
