@@ -2,6 +2,15 @@ package com.example.taskapp.controller;
 
 import com.example.taskapp.model.Task;
 import com.example.taskapp.service.TaskService;
+import com.example.taskapp.core.util.ResponseUtils;
+import com.example.taskapp.config.Api;
+import com.example.taskapp.config.ApiDocs;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,28 +26,78 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<Task> getAllTasks() {
-        return taskService.getAllTasks();
+    @Operation(operationId = "Tasks", summary = "Get All Tasks", description = "Retrieve a list of all tasks in the system.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ApiDocs.TasksDoc.class),
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> getAllTasks() {
+        return ResponseUtils.ok(taskService.getAllTasks());
     }
 
     @GetMapping("/{id}")
-    public Task getTaskById(@PathVariable Long id) {
-        return taskService.getTaskById(id);
+    @Operation(operationId = "Tasks", summary = "Get Task by ID", description = "Retrieve a specific task by its unique ID.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ApiDocs.TasksDoc.class),
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> getTaskById(@PathVariable Long id) {
+        return ResponseUtils.ok(taskService.getTaskById(id));
     }
 
     @PostMapping
-    public void createTask(@RequestBody Task task) {
+    @Operation(operationId = "Tasks", summary = "Create Task", description = "Add a new task to the collection.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> createTask(@RequestBody Task task) {
         taskService.createTask(task);
+        return ResponseUtils.success("Task created successfully");
     }
 
     @PutMapping("/{id}")
-    public void updateTask(@PathVariable Long id, @RequestBody Task task) {
+    @Operation(operationId = "Tasks", summary = "Update Task", description = "Modify the properties of an existing task.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody Task task) {
         task.setId(id);
         taskService.updateTask(task);
+        return ResponseUtils.success("Task updated successfully");
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTask(@PathVariable Long id) {
+    @Operation(operationId = "Tasks", summary = "Delete Task", description = "Remove a task from the system.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
+        return ResponseUtils.success("Task deleted successfully");
     }
 }

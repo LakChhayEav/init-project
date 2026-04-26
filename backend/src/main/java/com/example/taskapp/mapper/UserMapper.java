@@ -8,8 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
-    List<User> findAll(@Param("limit") Integer limit, @Param("offset") Integer offset, @Param("search") String search);
-    int countAll(@Param("search") String search);
+    List<User> findAll(@Param("limit") Integer limit, @Param("offset") Integer offset, @Param("search") String search, @Param("sortBy") String sortBy, @Param("sortDirection") String sortDirection);
     User findById(Integer id);
     User findByUsername(String username);
     void insert(User user);

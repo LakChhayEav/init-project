@@ -1,7 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Role } from '../models/user.model';
+import { ApiResponse } from '../models/api-response.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -12,11 +14,15 @@ export class RoleService {
   private readonly apiUrl = `${environment.apiUrl}/roles`;
 
   getAllRoles(): Observable<Role[]> {
-    return this.http.get<Role[]>(this.apiUrl);
+    return this.http.get<ApiResponse<Role[]>>(this.apiUrl).pipe(
+      map(res => res.data)
+    );
   }
 
   getRoleById(id: number): Observable<Role> {
-    return this.http.get<Role>(`${this.apiUrl}/${id}`);
+    return this.http.get<ApiResponse<Role>>(`${this.apiUrl}/${id}`).pipe(
+      map(res => res.data)
+    );
   }
 
   createRole(role: Role): Observable<void> {

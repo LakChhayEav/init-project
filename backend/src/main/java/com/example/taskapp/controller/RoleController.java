@@ -2,6 +2,15 @@ package com.example.taskapp.controller;
 
 import com.example.taskapp.model.Role;
 import com.example.taskapp.service.RoleService;
+import com.example.taskapp.core.util.ResponseUtils;
+import com.example.taskapp.config.Api;
+import com.example.taskapp.config.ApiDocs;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,43 +25,123 @@ public class RoleController {
     }
 
     @GetMapping
-    public List<Role> getAllRoles() {
-        return roleService.getAllRoles();
+    @Operation(operationId = "Roles", summary = "Get All Roles", description = "Retrieve a list of all security roles.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ApiDocs.RolesDoc.class),
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> getAllRoles() {
+        return ResponseUtils.ok(roleService.getAllRoles());
     }
 
     @GetMapping("/{id}")
-    public Role getRoleById(@PathVariable Integer id) {
-        return roleService.getRoleById(id);
+    @Operation(operationId = "Roles", summary = "Get Role by ID", description = "Retrieve a specific role by its unique ID.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = ApiDocs.RolesDoc.class),
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> getRoleById(@PathVariable Integer id) {
+        return ResponseUtils.ok(roleService.getRoleById(id));
     }
 
     @PostMapping
-    public void createRole(@RequestBody Role role) {
+    @Operation(operationId = "Roles", summary = "Create Role", description = "Create a new security role.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> createRole(@RequestBody Role role) {
         roleService.createRole(role);
+        return ResponseUtils.success("Role created successfully");
     }
 
     @PutMapping("/{id}")
-    public void updateRole(@PathVariable Integer id, @RequestBody Role role) {
+    @Operation(operationId = "Roles", summary = "Update Role", description = "Modify an existing security role.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> updateRole(@PathVariable Integer id, @RequestBody Role role) {
         role.setId(id);
         roleService.updateRole(role);
+        return ResponseUtils.success("Role updated successfully");
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRole(@PathVariable Integer id) {
+    @Operation(operationId = "Roles", summary = "Delete Role", description = "Permanently remove a security role.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> deleteRole(@PathVariable Integer id) {
         roleService.deleteRole(id);
+        return ResponseUtils.success("Role deleted successfully");
     }
 
     @PostMapping("/{roleId}/permissions/{permissionId}")
-    public void assignPermission(@PathVariable Integer roleId, @PathVariable Integer permissionId) {
+    @Operation(operationId = "Roles", summary = "Assign Permission", description = "Link a permission to a specific role.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> assignPermission(@PathVariable Integer roleId, @PathVariable Integer permissionId) {
         roleService.assignPermission(roleId, permissionId);
+        return ResponseUtils.success("Permission assigned successfully");
     }
 
     @DeleteMapping("/{roleId}/permissions/{permissionId}")
-    public void revokePermission(@PathVariable Integer roleId, @PathVariable Integer permissionId) {
+    @Operation(operationId = "Roles", summary = "Revoke Permission", description = "Remove a permission link from a role.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> revokePermission(@PathVariable Integer roleId, @PathVariable Integer permissionId) {
         roleService.revokePermission(roleId, permissionId);
+        return ResponseUtils.success("Permission revoked successfully");
     }
 
     @PutMapping("/{id}/permissions")
-    public void updateRolePermissions(@PathVariable Integer id, @RequestBody List<Integer> permissionIds) {
+    @Operation(operationId = "Roles", summary = "Update Role Permissions", description = "Bulk update permissions associated with a role.")
+    @ApiResponse(
+            responseCode = "200",
+            description = "ok",
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = @ExampleObject(name = Api.CodeMessage.ok)
+            )
+    )
+    public ResponseEntity<?> updateRolePermissions(@PathVariable Integer id, @RequestBody List<Integer> permissionIds) {
         roleService.updateRolePermissions(id, permissionIds);
+        return ResponseUtils.success("Role permissions updated successfully");
     }
 }

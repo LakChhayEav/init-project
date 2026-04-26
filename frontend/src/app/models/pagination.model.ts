@@ -5,8 +5,10 @@ export interface PageRequest {
 
 export interface PageResponse<T> {
   content: T[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
+  pagination: {
+    totalElements: number;
+    totalPages: number;
+    size: number;
+    number: number;
+  };
 }

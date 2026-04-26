@@ -18,7 +18,7 @@ import { LanguageService } from '../../services/language.service';
             <div class="w-16 h-16 bg-gradient-to-tr from-amber-600 to-amber-400 text-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-amber-200 ring-8 ring-amber-50">
               <i class="bi bi-shield-lock text-2xl"></i>
             </div>
-            <h1 class="text-2xl font-black text-slate-900 tracking-tight mb-2">{{ 'auth.change_password_title' | translate }}</h1>
+            <h1 class="text-2xl font-black text-slate-900 mb-2">{{ 'auth.change_password_title' | translate }}</h1>
             <p class="text-slate-500 text-sm font-medium leading-relaxed max-w-[280px] mx-auto">
               {{ 'auth.change_password_subtitle' | translate }}
             </p>
@@ -34,14 +34,14 @@ import { LanguageService } from '../../services/language.service';
               <label for="confirmPassword" class="label-pro text-slate-700 font-bold ml-1">{{ 'user.confirm_password' | translate }}</label>
               <input id="confirmPassword" formControlName="confirmPassword" type="password" class="input-pro h-14 text-lg focus:ring-amber-500/20 focus:border-amber-500 bg-slate-50/50" [placeholder]="'user.confirm_password' | translate" />
               @if (changeForm.errors?.['mismatch'] && changeForm.get('confirmPassword')?.touched) {
-                <p class="text-xs text-red-500 font-bold mt-2 uppercase tracking-tight flex items-center gap-2 px-1">
+                <p class="text-xs text-red-500 font-bold mt-2 uppercase flex items-center gap-2 px-1">
                   <i class="bi bi-exclamation-triangle-fill"></i>
                   {{ 'auth.password_mismatch' | translate }}
                 </p>
               }
             </div>
 
-            <button type="submit" class="btn-primary w-full h-14 mt-6 text-lg font-black tracking-wider bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 border-none shadow-xl shadow-amber-200/50 rounded-2xl transition-all active:scale-[0.98]" [disabled]="loading() || changeForm.invalid">
+            <button type="submit" class="btn-primary w-full h-14 mt-6 text-lg font-black bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-700 hover:to-amber-600 border-none shadow-xl shadow-amber-200/50 rounded-2xl transition-all active:scale-[0.98]" [disabled]="loading() || changeForm.invalid">
               @if (loading()) {
                 <span class="inline-block w-5 h-5 border-3 border-white/30 border-t-white rounded-full animate-spin mr-3"></span>
               }

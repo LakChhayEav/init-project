@@ -1,7 +1,8 @@
 import { Injectable, inject, PLATFORM_ID, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, map } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
+import { ApiResponse } from '../models/api-response.model';
 import { environment } from '../../environments/environment';
 
 interface LoginRequest {
@@ -58,7 +59,8 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, credentials).pipe(
+    return this.http.post<ApiResponse<LoginResponse>>(`${this.apiUrl}/login`, credentials).pipe(
+      map(res => res.data),
       tap((response) => {
         if (response.token) {
           const roles = response.roles?.length ? response.roles : ['USER'];
@@ -80,7 +82,8 @@ export class AuthService {
   }
 
   changePassword(newPassword: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/change-password`, { newPassword }).pipe(
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/change-password`, { newPassword }).pipe(
+      map(res => res.data),
       tap(() => {
         this.passwordResetRequired.set(false);
         if (this.isBrowser) {

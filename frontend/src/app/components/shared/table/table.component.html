@@ -6,7 +6,7 @@
           @for (col of columns; track col.key) {
             <th
               [class]="
-                'px-6 text-xs font-black text-slate-400 uppercase tracking-widest ' +
+                'px-6 text-xs font-black text-slate-400 uppercase ' +
                 (col.align === 'right' ? 'text-right ' : '') +
                 (col.className || '')
               "
@@ -68,7 +68,7 @@
   @if (totalElements > 0) {
     <div class="px-6 h-12 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between gap-4">
       <div class="flex items-center gap-12">
-        <span class="text-xs font-black text-slate-400 uppercase tracking-widest">
+        <span class="text-xs font-black text-slate-400 uppercase">
           {{ 'common.showing' | translate }}
           <span class="px-1">{{ data.length }}</span>
           {{ 'common.of' | translate }}
@@ -76,7 +76,7 @@
         </span>
 
         <div class="flex items-center gap-4">
-          <label class="text-xs font-black text-slate-400 uppercase tracking-widest">{{
+          <label class="text-xs font-black text-slate-400 uppercase">{{
             'common.rows_per_page' | translate
           }}</label>
           <div class="relative group">

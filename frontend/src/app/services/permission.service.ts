@@ -1,9 +1,11 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment';
 import { Permission } from '../models/user.model';
+import { ApiResponse } from '../models/api-response.model';
 
 export type AppFeature = 'main' | 'tasks' | 'users' | 'permissions' | 'change-password';
 export type AppCapability = 'view' | 'create' | 'update' | 'delete';
@@ -22,7 +24,9 @@ export class PermissionService {
   private readonly apiUrl = `${environment.apiUrl}/permissions`;
 
   getAllPermissions(): Observable<Permission[]> {
-    return this.http.get<Permission[]>(this.apiUrl);
+    return this.http.get<ApiResponse<Permission[]>>(this.apiUrl).pipe(
+      map(res => res.data)
+    );
   }
 
   readonly policies = signal<RolePolicy[]>([

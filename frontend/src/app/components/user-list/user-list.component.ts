@@ -104,8 +104,10 @@ export class UserListComponent {
     };
 
     this.userService.getPagedUsers(request, search).subscribe((response) => {
-      this.users.set(response.content);
-      this.totalElements.set(response.totalElements);
+      this.users.set(response.data);
+      if (response.pagination) {
+        this.totalElements.set(response.pagination.totalElements);
+      }
       this.normalizeCurrentPage();
     });
   }

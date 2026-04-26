@@ -30,8 +30,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public void createRole(Role role) {
-        String currentUser = getCurrentUser();
-        LocalDateTime now = LocalDateTime.now();
+        var currentUser = getCurrentUser();
+        var now = LocalDateTime.now();
         role.setCreatedBy(currentUser);
         role.setCreatedDate(now);
         roleMapper.insert(role);
@@ -54,8 +54,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @Transactional
     public void assignPermission(Integer roleId, Integer permissionId) {
-        String currentUser = getCurrentUser();
-        LocalDateTime now = LocalDateTime.now();
+        var currentUser = getCurrentUser();
+        var now = LocalDateTime.now();
         roleMapper.addPermissionToRole(roleId, permissionId, currentUser, now, null, null);
     }
 
@@ -76,9 +76,9 @@ public class RoleServiceImpl implements RoleService {
     public void updateRolePermissions(Integer roleId, List<Integer> permissionIds) {
         roleMapper.removeAllPermissionsFromRole(roleId);
         if (permissionIds != null) {
-            String currentUser = getCurrentUser();
-            LocalDateTime now = LocalDateTime.now();
-            for (Integer pid : permissionIds) {
+            var currentUser = getCurrentUser();
+            var now = LocalDateTime.now();
+            for (var pid : permissionIds) {
                 roleMapper.addPermissionToRole(roleId, pid, currentUser, now, null, null);
             }
         }
