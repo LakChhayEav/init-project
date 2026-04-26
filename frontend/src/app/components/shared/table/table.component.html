@@ -2,11 +2,11 @@
   <div class="overflow-x-auto">
     <table class="w-full text-left">
       <thead>
-        <tr class="bg-slate-50/50 border-b border-slate-100">
+        <tr class="bg-slate-50/50 border-b border-slate-100 h-12">
           @for (col of columns; track col.key) {
             <th
               [class]="
-                'px-6 py-4 text-xs font-black text-slate-400 uppercase  ' +
+                'px-6 text-xs font-black text-slate-400 uppercase tracking-widest ' +
                 (col.align === 'right' ? 'text-right ' : '') +
                 (col.className || '')
               "
@@ -66,22 +66,22 @@
 
   <!-- Polished Pagination -->
   @if (totalElements > 0) {
-    <div class="px-8 py-5 bg-slate-50/50 border-t border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
-      <div class="flex flex-wrap items-center gap-8">
-        <span class="text-sm font-bold text-slate-400 uppercase ">
+    <div class="px-6 h-12 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-12">
+        <span class="text-xs font-black text-slate-400 uppercase tracking-widest">
           {{ 'common.showing' | translate }}
-          <span class="text-slate-900 font-black">{{ data.length }}</span>
+          <span class="px-1">{{ data.length }}</span>
           {{ 'common.of' | translate }}
-          <span class="text-slate-900 font-black">{{ totalElements }}</span>
+          <span class="px-1">{{ totalElements }}</span>
         </span>
 
-        <div class="flex items-center gap-3">
-          <label class="text-xs font-black text-slate-400 uppercase ">{{
+        <div class="flex items-center gap-4">
+          <label class="text-xs font-black text-slate-400 uppercase tracking-widest">{{
             'common.rows_per_page' | translate
           }}</label>
           <div class="relative group">
             <select
-                class="appearance-none bg-white border-transparent rounded-xl px-4 py-2 text-xs font-black text-slate-900 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/30 transition-all outline-none shadow-sm cursor-pointer pr-10"
+                class="appearance-none bg-white border border-slate-200 rounded-lg px-3 py-1 text-xs font-black text-slate-500 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500/30 transition-all outline-none shadow-sm cursor-pointer pr-8 hover:border-slate-300"
                 [value]="pageSize"
                 (change)="onSizeChange($event)"
             >
@@ -89,30 +89,30 @@
                 <option [value]="option">{{ option }}</option>
                 }
             </select>
-            <i class="bi bi-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[10px]"></i>
+            <i class="bi bi-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none text-[8px]"></i>
           </div>
         </div>
       </div>
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2">
         <button
           type="button"
-          class="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-transparent shadow-sm text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          class="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-slate-200 shadow-sm text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           [disabled]="currentPage === 0"
           (click)="onPageChange(currentPage)"
         >
-          <i class="bi bi-chevron-left text-lg"></i>
+          <i class="bi bi-chevron-left text-sm"></i>
         </button>
 
-        <div class="flex items-center gap-2 mx-1">
+        <div class="flex items-center gap-1.5 mx-1">
           @for (page of pageNumbers; track page) {
             <button
               type="button"
-              class="w-10 h-10 flex items-center justify-center rounded-xl text-xs font-black transition-all"
+              class="w-8 h-8 flex items-center justify-center rounded-lg text-xs font-black transition-all"
               [class]="
                 page === currentPage + 1
-                  ? 'bg-slate-900 text-white shadow-xl shadow-slate-200'
-                  : 'bg-white text-slate-400 hover:text-indigo-600 hover:bg-indigo-50'
+                  ? 'bg-slate-900 text-white shadow-lg shadow-slate-200'
+                  : 'bg-white border border-slate-200 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-100'
               "
               (click)="onPageChange(page)"
             >
@@ -123,11 +123,11 @@
 
         <button
           type="button"
-          class="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-transparent shadow-sm text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          class="w-8 h-8 flex items-center justify-center rounded-lg bg-white border border-slate-200 shadow-sm text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 hover:border-indigo-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           [disabled]="currentPage === totalPages - 1"
           (click)="onPageChange(currentPage + 2)"
         >
-          <i class="bi bi-chevron-right text-lg"></i>
+          <i class="bi bi-chevron-right text-sm"></i>
         </button>
       </div>
     </div>
