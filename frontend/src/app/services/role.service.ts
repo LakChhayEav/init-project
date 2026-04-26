@@ -14,13 +14,13 @@ export class RoleService {
   private readonly apiUrl = `${environment.apiUrl}/roles`;
 
   getAllRoles(): Observable<Role[]> {
-    return this.http.get<ApiResponse<Role[]>>(this.apiUrl).pipe(
+    return this.http.post<ApiResponse<Role[]>>(`${this.apiUrl}/search`, {}).pipe(
       map(res => res.data)
     );
   }
 
   getRoleById(id: number): Observable<Role> {
-    return this.http.get<ApiResponse<Role>>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.post<ApiResponse<Role>>(`${this.apiUrl}/${id}`, {}).pipe(
       map(res => res.data)
     );
   }

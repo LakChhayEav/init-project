@@ -1,13 +1,11 @@
 package com.example.taskapp.service.impl;
 
-import com.example.taskapp.core.interceptor.PageContext;
 import com.example.taskapp.mapper.RoleMapper;
 import com.example.taskapp.mapper.UserMapper;
 import com.example.taskapp.core.dto.PageResponse;
 import com.example.taskapp.core.dto.FilterPaging;
 import com.example.taskapp.core.dto.PageRequest;
 import com.example.taskapp.core.dto.Pagination;
-import com.example.taskapp.model.Role;
 import com.example.taskapp.model.User;
 import com.example.taskapp.service.UserService;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,6 +1,5 @@
 package com.example.taskapp.controller;
 
-import com.example.taskapp.model.Permission;
 import com.example.taskapp.service.PermissionService;
 import com.example.taskapp.core.util.ResponseUtils;
 import com.example.taskapp.config.Api;
@@ -23,7 +22,7 @@ public class PermissionController {
         this.permissionService = permissionService;
     }
 
-    @GetMapping
+    @PostMapping("/search")
     @PreAuthorize("hasAuthority('PERMISSIONS_VIEW')")
     @Operation(operationId = "Permissions", summary = "Get All Permissions", description = "Retrieve a list of all available system permissions.")
     @ApiResponse(

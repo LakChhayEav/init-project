@@ -2,7 +2,6 @@ package com.example.taskapp.core.exception;
 
 import com.example.taskapp.core.dto.ApiResponse;
 import com.example.taskapp.core.util.ResponseUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;

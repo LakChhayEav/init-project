@@ -25,7 +25,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping
+    @PostMapping("/search")
     @PreAuthorize("hasAuthority('TASKS_VIEW')")
     @Operation(operationId = "Tasks", summary = "Get All Tasks", description = "Retrieve a list of all tasks in the system.")
     @ApiResponse(
@@ -41,7 +41,7 @@ public class TaskController {
         return ResponseUtils.ok(taskService.getAllTasks());
     }
 
-    @GetMapping("/{id}")
+    @PostMapping("/{id}")
     @PreAuthorize("hasAuthority('TASKS_VIEW')")
     @Operation(operationId = "Tasks", summary = "Get Task by ID", description = "Retrieve a specific task by its unique ID.")
     @ApiResponse(

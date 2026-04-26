@@ -2,16 +2,13 @@ package com.example.taskapp.controller;
 
 import com.example.taskapp.dto.LoginRequest;
 import com.example.taskapp.dto.LoginResponse;
-import com.example.taskapp.model.User;
 import com.example.taskapp.security.JwtTokenProvider;
 import com.example.taskapp.service.UserService;
 import com.example.taskapp.core.util.ResponseUtils;
 import com.example.taskapp.config.Api;
-import com.example.taskapp.config.ApiDocs;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

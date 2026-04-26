@@ -24,7 +24,7 @@ export class PermissionService {
   private readonly apiUrl = `${environment.apiUrl}/permissions`;
 
   getAllPermissions(): Observable<Permission[]> {
-    return this.http.get<ApiResponse<Permission[]>>(this.apiUrl).pipe(
+    return this.http.post<ApiResponse<Permission[]>>(`${this.apiUrl}/search`, {}).pipe(
       map(res => res.data)
     );
   }

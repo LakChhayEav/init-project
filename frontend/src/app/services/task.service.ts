@@ -14,13 +14,13 @@ export class TaskService {
   private readonly apiUrl = `${environment.apiUrl}/tasks`;
 
   getTasks(): Observable<Task[]> {
-    return this.http.get<ApiResponse<Task[]>>(this.apiUrl).pipe(
+    return this.http.post<ApiResponse<Task[]>>(`${this.apiUrl}/search`, {}).pipe(
       map(res => res.data)
     );
   }
 
   getTask(id: number): Observable<Task> {
-    return this.http.get<ApiResponse<Task>>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.post<ApiResponse<Task>>(`${this.apiUrl}/${id}`, {}).pipe(
       map(res => res.data)
     );
   }
